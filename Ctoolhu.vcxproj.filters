@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ctoolhu">
+      <UniqueIdentifier>{c8002887-ac43-4cc6-af5f-4b05cdf4729d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ctoolhu\event">
+      <UniqueIdentifier>{d6a85728-6320-44fe-880e-59f50008cdf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ctoolhu\random">
+      <UniqueIdentifier>{0f1aaf7b-bd20-4a1f-93cc-8ab6f680794f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ctoolhu\event\aggregator.hpp">
+      <Filter>ctoolhu\event</Filter>
+    </ClInclude>
+    <ClInclude Include="ctoolhu\event\firer.hpp">
+      <Filter>ctoolhu\event</Filter>
+    </ClInclude>
+    <ClInclude Include="ctoolhu\event\subscriber.hpp">
+      <Filter>ctoolhu\event</Filter>
+    </ClInclude>
+    <ClInclude Include="ctoolhu\random\generator.hpp">
+      <Filter>ctoolhu\random</Filter>
+    </ClInclude>
+    <ClInclude Include="ctoolhu\random\engine.hpp">
+      <Filter>ctoolhu\random</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AssemblyInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
