@@ -18,33 +18,47 @@ namespace Ctoolhu {
 		namespace Private {
 
 			//generator with run-time bounds
-			template <class Distribution, typename Bounds = int>
+			template <
+				class Distribution,
+				typename Boundary = int
+			>
 			class DynamicMersenneGenerator :
-				public boost::variate_generator<MersenneEngine, Distribution> {
+				public boost::variate_generator<MersenneEngine &, Distribution>
+			{
 	
 			  public:
 
 				//for number generators
-				DynamicMersenneGenerator(Bounds lower, Bounds upper) :
-					boost::variate_generator<MersenneEngine, Distribution>(
-						SingleMersenneEngine::Instance(), Distribution(lower, upper)) {};
+				DynamicMersenneGenerator(Boundary lower, Boundary upper) :
+					boost::variate_generator<MersenneEngine &, Distribution>(
+						SingleMersenneEngine::Instance(), Distribution(lower, upper))
+				{};
 
 				//for bool generator
 				DynamicMersenneGenerator() :
-					boost::variate_generator<MersenneEngine, Distribution>(SingleMersenneEngine::Instance(), Distribution()) {};
+					boost::variate_generator<MersenneEngine &, Distribution>(
+						SingleMersenneEngine::Instance(), Distribution())
+				{};
 			};
 
 		}; //ns Private
 
 		//generator with compile-time bounds
-		template <int Lower, int Upper, class Distribution = boost::uniform_int<> >
+		template <
+			int LowerBound,
+			int UpperBound,
+			class Distribution = boost::uniform_int<>
+		>
 		class StaticGenerator :
-			public boost::variate_generator<Private::MersenneEngine, Distribution> {
+			public boost::variate_generator<Private::MersenneEngine &, Distribution>
+		{
 	
 		  public:
 
 			StaticGenerator() :
-				boost::variate_generator<Private::MersenneEngine, Distribution>(Private::SingleMersenneEngine::Instance(), Distribution(Lower, Upper)) {};
+				boost::variate_generator<Private::MersenneEngine &, Distribution>(
+					Private::SingleMersenneEngine::Instance(), Distribution(LowerBound, UpperBound))
+			{};
 		};
 
 		//expose typical usages of the dynamic generator

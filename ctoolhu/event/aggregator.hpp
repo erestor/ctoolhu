@@ -38,6 +38,10 @@ namespace Ctoolhu {
 
 				Aggregator() {}; //prevents instantiation outside the singleton
 
+				//prevent copying and assignment
+				Aggregator(const Aggregator &);
+				Aggregator &operator=(const Aggregator &);
+
 				signal_type _signal;
 			};
 

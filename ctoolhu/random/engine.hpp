@@ -5,7 +5,7 @@
 #define _ctoolhu_random_engine_included_
 
 #include <boost/random/mersenne_twister.hpp>
-#include <loki/singleton.h>
+#include <loki/Singleton.h>
 
 namespace Ctoolhu {
 
@@ -14,14 +14,17 @@ namespace Ctoolhu {
 		namespace Private {
 
 			//random generator engine
-			class MersenneEngine
-				: public boost::mt19937 {
+			class MersenneEngine : public boost::mt19937 {
 
 			  private: 
 
 				friend struct Loki::CreateUsingNew<MersenneEngine>;
 
 				MersenneEngine() {}; //prevents instantiation outside the singleton
+
+				//prevent copying and assignment
+				MersenneEngine(const MersenneEngine &);
+				MersenneEngine &operator=(const MersenneEngine &);
 			};
 
 			typedef Loki::SingletonHolder<MersenneEngine> SingleMersenneEngine;

@@ -12,13 +12,14 @@ namespace Ctoolhu {
 
 	namespace Event {
 
-		//provides effortless access to subscription of an event handler to the event aggregator
-		//
-		//inheriting from this class will subscribe event handler automatically upon object construction
-		//Event is the event we want to subscribe for, HandlerHolder is typically the child class
+		//provides effortless access to subscription of an event handler to the event aggregator -
+		//- inheriting from this class will subscribe event handler automatically upon object construction
 		//
 		//Doesn't support multiple handlers for one event in one child class
-		template <class Event, class HandlerHolder>
+		template <
+			class Event,			//event we want to subscribe for
+			class HandlerHolder		//typically the child class
+		>
 		class Subscriber {
 
 		  protected:
