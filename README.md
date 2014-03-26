@@ -3,6 +3,8 @@ ctoolhu
 
 C++ library built on Boost &amp; Loki featuring lightweight implementations of repeating concepts
 
+Ctoolhu is located in ctoolhu directory and is platform-independent. The other files in the repository make it possible for Ctoolhu to be opened as a Visual Studio project.
+
 Ctoolhu includes:
 
 - generic event aggregators
