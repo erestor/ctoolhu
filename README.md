@@ -9,6 +9,7 @@ Ctoolhu includes:
 
 - generic event aggregators
 - random number generators
+- type-safe Id class
 
 To do:
 

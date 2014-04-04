@@ -14,6 +14,9 @@
     <Filter Include="ctoolhu\random">
       <UniqueIdentifier>{0f1aaf7b-bd20-4a1f-93cc-8ab6f680794f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ctoolhu\typesafe">
+      <UniqueIdentifier>{4497073f-04e8-4df9-bdb6-ee4cc6be5ece}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ctoolhu\event\aggregator.hpp">
@@ -30,6 +33,9 @@
     </ClInclude>
     <ClInclude Include="ctoolhu\random\engine.hpp">
       <Filter>ctoolhu\random</Filter>
+    </ClInclude>
+    <ClInclude Include="ctoolhu\typesafe\id.hpp">
+      <Filter>ctoolhu\typesafe</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
