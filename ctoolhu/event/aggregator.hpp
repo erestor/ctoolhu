@@ -36,7 +36,7 @@ namespace Ctoolhu {
 
 				friend struct Loki::CreateUsingNew<Aggregator>;
 
-				Aggregator() {}; //prevents instantiation outside the singleton
+				Aggregator() {} //prevents instantiation outside the singleton
 
 				//prevent copying and assignment
 				Aggregator(const Aggregator &);

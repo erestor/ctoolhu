@@ -20,11 +20,11 @@ namespace Ctoolhu {
 
 				friend struct Loki::CreateUsingNew<MersenneEngine>;
 
-				MersenneEngine() {}; //prevents instantiation outside the singleton
+				MersenneEngine() {} //prevents instantiation outside the singleton
 
 				//prevent copying and assignment
 				MersenneEngine(const MersenneEngine &);
-				MersenneEngine &operator=(const MersenneEngine &);
+				MersenneEngine &operator =(const MersenneEngine &);
 			};
 
 			typedef Loki::SingletonHolder<MersenneEngine> SingleMersenneEngine;
