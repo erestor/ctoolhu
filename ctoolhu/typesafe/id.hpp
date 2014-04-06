@@ -112,14 +112,6 @@ namespace Ctoolhu {
 			{
 				_id = id;
 			}
-
-			Id &operator =(const self_type &src)
-			{
-				if (this != &src) {
-					_id = src._id;
-				}
-				return *this;
-			}
 		};
 
 	}; //ns TypeSafe

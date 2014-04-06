@@ -40,13 +40,13 @@ namespace Ctoolhu {
 
 				//prevent copying and assignment
 				Aggregator(const Aggregator &);
-				Aggregator &operator=(const Aggregator &);
+				Aggregator &operator =(const Aggregator &);
 
 				signal_type _signal;
 			};
 
 			template <class Event>
-			class SingleAggregator : public Loki::SingletonHolder<Private::Aggregator<Event> > {};
+			class SingleAggregator : public Loki::SingletonHolder<Private::Aggregator<Event>> {};
 
 		}; //ns Private
 

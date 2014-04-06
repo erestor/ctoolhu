@@ -53,10 +53,10 @@ namespace Ctoolhu {
 		};
 
 		//expose typical usages of the dynamic generator
-		typedef Generator<boost::uniform_int<> >				IntGenerator;
-		typedef Generator<boost::uniform_smallint<> >			SmallIntGenerator;
+		typedef Generator<boost::uniform_int<>>					IntGenerator;
+		typedef Generator<boost::uniform_smallint<>>			SmallIntGenerator;
 		typedef Generator<boost::uniform_real<float>, float>	FloatGenerator;
-		typedef Generator<boost::bernoulli_distribution<> >		BoolGenerator;
+		typedef Generator<boost::bernoulli_distribution<>>		BoolGenerator;
 
 	}; //ns Random
 
