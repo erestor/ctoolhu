@@ -1,12 +1,14 @@
 #ifndef _ctoolhu_typesafe_id_included_
 #define _ctoolhu_typesafe_id_included_
 
+#include <ostream>
+
 namespace Ctoolhu {
 
 	namespace TypeSafe {
 
 		//stores a value (id) and exposes some typical operations usually performed on ids
-		template <class IdType>
+		template <typename IdType>
 		class Storage {
 			
 			typedef Storage<IdType> self_type;
@@ -43,12 +45,22 @@ namespace Ctoolhu {
 				return _id >= comp._id;
 			}
 
+			template <typename T>
+			friend std::ostream &operator <<(std::ostream &, const Storage<T> &);
+
 		  protected:
 
 			Storage() {} //not for stand-alone instantiation
 
 			IdType _id;
 		};
+
+		template <typename T>
+		std::ostream &operator <<(std::ostream &out, const Storage<T> &storage)
+		{
+			out << storage._id;
+			return out;
+		}
 
 		//conversion to stored id type is implicit
 		template <typename IdType>
