@@ -84,7 +84,7 @@ namespace Ctoolhu {
 
 		  public:
 
-			IdType operator()() const
+			explicit operator IdType() const
 			{
 				return _id;
 			}
