@@ -19,6 +19,9 @@ namespace Ctoolhu {
 
 			  public:
 
+				Aggregator(const Aggregator &) = delete;
+				Aggregator &operator =(const Aggregator &) = delete;
+
 				typedef boost::signals2::signal<void (Event *)> signal_type;
 				typedef typename signal_type::slot_type slot_type; 
 			  
@@ -38,15 +41,11 @@ namespace Ctoolhu {
 
 				Aggregator() {} //prevents instantiation outside the singleton
 
-				//prevent copying and assignment
-				Aggregator(const Aggregator &);
-				Aggregator &operator =(const Aggregator &);
-
 				signal_type _signal;
 			};
 
 			template <class Event>
-			class SingleAggregator : public Loki::SingletonHolder<Private::Aggregator<Event>> {};
+			using SingleAggregator = Loki::SingletonHolder<Private::Aggregator<Event>>;
 
 		}; //ns Private
 
