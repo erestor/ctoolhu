@@ -83,6 +83,8 @@
     <ClInclude Include="ctoolhu\event\subscriber.hpp" />
     <ClInclude Include="ctoolhu\random\engine.hpp" />
     <ClInclude Include="ctoolhu\random\generator.hpp" />
+    <ClInclude Include="ctoolhu\thread\lockable.hpp" />
+    <ClInclude Include="ctoolhu\thread\proxy.hpp" />
     <ClInclude Include="ctoolhu\typesafe\id.hpp" />
   </ItemGroup>
   <ItemGroup>

@@ -17,6 +17,9 @@
     <Filter Include="ctoolhu\typesafe">
       <UniqueIdentifier>{4497073f-04e8-4df9-bdb6-ee4cc6be5ece}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ctoolhu\thread">
+      <UniqueIdentifier>{43dba989-7d05-4476-8abf-fb16e9ee5758}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ctoolhu\event\aggregator.hpp">
@@ -36,6 +39,12 @@
     </ClInclude>
     <ClInclude Include="ctoolhu\typesafe\id.hpp">
       <Filter>ctoolhu\typesafe</Filter>
+    </ClInclude>
+    <ClInclude Include="ctoolhu\thread\proxy.hpp">
+      <Filter>ctoolhu\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ctoolhu\thread\lockable.hpp">
+      <Filter>ctoolhu\thread</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
