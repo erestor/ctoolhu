@@ -38,8 +38,7 @@ namespace Ctoolhu {
 			  private:
 
 				friend struct Loki::CreateUsingNew<Aggregator>;
-
-				Aggregator() {} //prevents instantiation outside the singleton
+				Aggregator() = default;
 
 				signal_type _signal;
 			};

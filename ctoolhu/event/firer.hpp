@@ -20,6 +20,8 @@ namespace Ctoolhu {
 			template <class Event>
 			static void Fire()
 			{
+				struct Empty {};
+				static_assert(sizeof(Event) == sizeof(Empty), "can't fire events with parameters by type only");
 				Private::SingleAggregator<Event>::Instance().Fire(Loki::SingletonHolder<Event>::Instance());
 			}
 

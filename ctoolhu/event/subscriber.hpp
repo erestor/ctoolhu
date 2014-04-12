@@ -5,7 +5,6 @@
 #define _ctoolhu_event_subscriber_included_
 
 #include "aggregator.hpp"
-#include <boost/bind.hpp>
 #include <boost/signals2.hpp>
 
 namespace Ctoolhu {
@@ -22,31 +21,54 @@ namespace Ctoolhu {
 		>
 		class Subscriber {
 
+			typedef boost::signals2::connection connection_type;
+			using handler_type = void (HandlerHolder::*)(Event *);
+
 		  protected:
 
 			//automatically subscribes method 'on(Event *)' as a handler
 			Subscriber()
 			{
-				_connection = Private::SingleAggregator<Event>::Instance().Subscribe(
-					boost::bind((void (HandlerHolder::*)(Event *))&HandlerHolder::on, static_cast<HandlerHolder *>(this), _1));
+				_connection = Subscribe();
 			}
 
 			//manually subscribes a given custom handler
-			Subscriber(void (HandlerHolder::*handler)(Event *))
+			Subscriber(handler_type handler)
 			{
-				_connection = Private::SingleAggregator<Event>::Instance().Subscribe(
-					boost::bind(handler, static_cast<HandlerHolder *>(this), _1));
+				_connection = Subscribe(handler);
 			}
 
+			Subscriber(const Subscriber &) = delete;
+			Subscriber &operator =(const Subscriber &) = delete;
+
 			~Subscriber()
+			{
+				Unsubscribe();
+			}
+
+		  private:
+
+			connection_type Subscribe()
+			{
+				return Private::SingleAggregator<Event>::Instance().Subscribe([this](Event *e) {
+					static_cast<HandlerHolder *>(this)->on(e);
+				});
+			}
+
+			connection_type Subscribe(handler_type handler)
+			{
+				return Private::SingleAggregator<Event>::Instance().Subscribe([this, handler](Event *ev) {
+					(static_cast<HandlerHolder *>(this)->*handler)(ev);
+				});
+			}
+
+			void Unsubscribe()
 			{
 				if (_connection.connected())
 					_connection.disconnect();
 			}
 
-		  private:
-
-			boost::signals2::connection _connection;
+			connection_type _connection;
 		};
 
 	}; //ns Event
