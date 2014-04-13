@@ -11,6 +11,8 @@ namespace Ctoolhu {
 	
 	namespace Event {
 
+		typedef boost::signals2::connection connection_type;
+
 		namespace Private {
 
 			//facilitates event handling between unrelated publishers and subscribers
@@ -25,7 +27,7 @@ namespace Ctoolhu {
 				typedef boost::signals2::signal<void (Event *)> signal_type;
 				typedef typename signal_type::slot_type slot_type; 
 			  
-				boost::signals2::connection Subscribe(const slot_type &handler)
+				connection_type Subscribe(const slot_type &handler)
 				{
 					return _signal.connect(handler);
 				}
