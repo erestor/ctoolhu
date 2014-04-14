@@ -20,6 +20,9 @@
     <Filter Include="ctoolhu\thread">
       <UniqueIdentifier>{43dba989-7d05-4476-8abf-fb16e9ee5758}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ctoolhu\time">
+      <UniqueIdentifier>{68924fab-8aef-4ecc-b0f5-0dcc8123f63c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ctoolhu\event\aggregator.hpp">
@@ -45,6 +48,9 @@
     </ClInclude>
     <ClInclude Include="ctoolhu\thread\lockable.hpp">
       <Filter>ctoolhu\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ctoolhu\time\timer.hpp">
+      <Filter>ctoolhu\time</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

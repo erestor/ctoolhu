@@ -1,18 +1,25 @@
-ctoolhu
-=======
+ Ctoolhu
+=========
 
-C++ library built on Boost &amp; Loki featuring lightweight implementations of repeating concepts
+What is it?
 
-Ctoolhu is located in ctoolhu directory and is platform-independent. The other files in the repository make it possible for Ctoolhu to be opened as a Visual Studio 2013 project.
+- C++ library featuring lightweight implementations of repeating concepts (design patterns)
+- using C++11, Boost &amp; Loki
 
-Ctoolhu includes:
+Where is it?
 
-- generic event aggregators
+- Ctoolhu is located in ctoolhu directory and is platform-independent
+- the other files in the repository make it possible for Ctoolhu to be opened as a Visual Studio 2013 project
+
+What does it give you?
+
+- generic event aggregator
 - random number generators
 - type-safe Id class
 - locking proxy for object-level locking
+- timers for duration measurement
 
-To do:
+What next?
 
-- merge event aggregators for all events into one
 - add more components as they come up in production
+

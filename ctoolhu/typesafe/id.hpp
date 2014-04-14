@@ -50,7 +50,7 @@ namespace Ctoolhu {
 
 		  protected:
 
-			Storage() {} //not for stand-alone instantiation
+			Storage() = default;
 
 			IdType _id;
 		};
@@ -75,7 +75,7 @@ namespace Ctoolhu {
 
 		  protected:
 
-			ImplicitConversion() {} //not for stand-alone instantiation
+			ImplicitConversion() = default;
 		};
 
 		//conversion to stored id type is explicit, via the operator ()
@@ -91,7 +91,7 @@ namespace Ctoolhu {
 
 		  protected:
 
-			ExplicitConversion() {} //not for stand-alone instantiation
+			ExplicitConversion() = default;
 		};
 
 		//Tool for preventing mix-up of ids of different objects by means of
@@ -112,8 +112,6 @@ namespace Ctoolhu {
 			template <typename> class ConversionPolicy = ImplicitConversion
 		>
 		class Id : public ConversionPolicy<IdType> {
-
-			typedef Id<RequestingObject, IdType, ConversionPolicy> self_type;
 
 		  public:
 

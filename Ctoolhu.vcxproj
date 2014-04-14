@@ -43,6 +43,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IgnoreImportLibrary>false</IgnoreImportLibrary>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -85,6 +86,7 @@
     <ClInclude Include="ctoolhu\random\generator.hpp" />
     <ClInclude Include="ctoolhu\thread\lockable.hpp" />
     <ClInclude Include="ctoolhu\thread\proxy.hpp" />
+    <ClInclude Include="ctoolhu\time\timer.hpp" />
     <ClInclude Include="ctoolhu\typesafe\id.hpp" />
   </ItemGroup>
   <ItemGroup>
