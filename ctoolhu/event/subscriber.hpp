@@ -97,7 +97,7 @@ namespace Ctoolhu {
 
 			~ManualSubscriber()
 			{
-				for (auto conn : _connections) {
+				for (auto &conn : _connections) {
 					if (conn.connected())
 						conn.disconnect();
 				}
