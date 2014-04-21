@@ -6,32 +6,26 @@
 
 #include "aggregator.hpp"
 #include <loki/Singleton.h>
+#include <type_traits>
 
 namespace Ctoolhu {
 
 	namespace Event {
 
-		//use this class to fire events effortlessly
-		class Firer {
+		//for firing events without parameters ('singleton events')
+		template <class Event>
+		void Fire()
+		{
+			static_assert(std::is_empty<Event>::value, "can't fire events with parameters by type only");
+			Private::SingleAggregator<Event>::Instance().Fire(Loki::SingletonHolder<Event>::Instance());
+		}
 
-		  public:
-
-			//for events without parameters ('singleton events')
-			template <class Event>
-			static void Fire()
-			{
-				struct Empty {};
-				static_assert(sizeof(Event) == sizeof(Empty), "can't fire events with parameters by type only");
-				Private::SingleAggregator<Event>::Instance().Fire(Loki::SingletonHolder<Event>::Instance());
-			}
-
-			//for full events
-			template <class Event>
-			static void Fire(Event &e)
-			{
-				Private::SingleAggregator<Event>::Instance().Fire(e);
-			}
-		};
+		//for firing full events
+		template <class Event>
+		void Fire(Event &e)
+		{
+			Private::SingleAggregator<Event>::Instance().Fire(e);
+		}
 
 	}; //ns Event
 

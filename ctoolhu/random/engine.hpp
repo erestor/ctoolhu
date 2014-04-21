@@ -12,19 +12,9 @@ namespace Ctoolhu {
 	namespace Random {
 	
 		namespace Private {
-
-			//random generator engine
-			class MersenneEngine : public std::mt19937 {
-
-				MersenneEngine(const MersenneEngine &) = delete;
-				MersenneEngine &operator =(const MersenneEngine &) = delete;
-
-				friend struct Loki::CreateUsingNew<MersenneEngine>;
-
-				MersenneEngine() {} //prevents instantiation outside the singleton
-			};
-
-			typedef Loki::SingletonHolder<MersenneEngine> SingleMersenneEngine;
+			
+			typedef std::mt19937 RandomEngine; //random generator engine
+			typedef Loki::SingletonHolder<RandomEngine> SingleRandomEngine;
 
 		}; //ns Private
 
