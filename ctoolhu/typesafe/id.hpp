@@ -1,7 +1,7 @@
 #ifndef _ctoolhu_typesafe_id_included_
 #define _ctoolhu_typesafe_id_included_
 
-#include <ostream>
+#include <iosfwd>
 
 namespace Ctoolhu {
 
@@ -45,8 +45,11 @@ namespace Ctoolhu {
 				return _id >= comp._id;
 			}
 
-			template <typename T>
-			friend std::ostream &operator <<(std::ostream &, const Storage<T> &);
+			friend std::ostream &operator <<(std::ostream &out, const self_type &storage)
+			{
+				out << storage._id;
+				return out;
+			}
 
 		  protected:
 
@@ -55,14 +58,7 @@ namespace Ctoolhu {
 			IdType _id;
 		};
 
-		template <typename T>
-		std::ostream &operator <<(std::ostream &out, const Storage<T> &storage)
-		{
-			out << storage._id;
-			return out;
-		}
-
-		//conversion to stored id type is implicit
+		//policy defining that the conversion to stored id type is implicit
 		template <typename IdType>
 		class ImplicitConversion : public Storage<IdType> {
 
@@ -78,7 +74,7 @@ namespace Ctoolhu {
 			ImplicitConversion() = default;
 		};
 
-		//conversion to stored id type is explicit, via the operator ()
+		//policy defining that the conversion to stored id type is explicit so that it cannot be mistakenly juxtaposed for the underlying type
 		template <typename IdType>
 		class ExplicitConversion : public Storage<IdType> {
 
@@ -104,11 +100,11 @@ namespace Ctoolhu {
 		//
 		//instead of
 		//
-		//	unsigned int _id;
+		//	int _id;
 		//
 		template <
-			class RequestingObject,				//type of the object which will have this id
-			typename IdType = unsigned int,		//type of the id that would normally be used
+			class RequestingObject,		//type of the object which will have this id
+			typename IdType = int,		//type of the id that would normally be used
 			template <typename> class ConversionPolicy = ImplicitConversion
 		>
 		class Id : public ConversionPolicy<IdType> {
@@ -119,9 +115,24 @@ namespace Ctoolhu {
 			typedef IdType id_type;
 
 			explicit Id(IdType id)
+#ifdef _DEBUG
+				: _val(_id)
+#endif
 			{
 				_id = id;
 			}
+
+#ifdef _DEBUG
+			Id &operator =(const Id &src)
+			{
+				_id = src._id;
+				return *this;
+			}
+
+		  private:
+
+			const IdType &_val; //so that we can see the value readily in watch window of the debugger
+#endif
 		};
 
 	}; //ns TypeSafe
