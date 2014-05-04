@@ -15,5 +15,6 @@
 # Windows stuff
 Debug/
 Release/
+ReleaseDebug/
 Ctoolhu.vcxproj.user
 
