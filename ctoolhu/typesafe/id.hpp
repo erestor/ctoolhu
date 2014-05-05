@@ -123,6 +123,12 @@ namespace Ctoolhu {
 			}
 
 #ifdef _DEBUG
+			Id(const Id &src)
+				: _val(_id)
+			{
+				_id = src._id;
+			}
+
 			Id &operator =(const Id &src)
 			{
 				_id = src._id;
