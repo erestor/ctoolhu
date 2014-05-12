@@ -18,6 +18,7 @@ What does it give you?
 - type-safe Id class
 - locking proxy for object-level locking
 - timers for duration measurement
+- extension for simplified use of standard library algorithms
 
 What next?
 

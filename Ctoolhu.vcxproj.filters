@@ -48,5 +48,8 @@
     <ClInclude Include="ctoolhu\time\timer.hpp">
       <Filter>ctoolhu\time</Filter>
     </ClInclude>
+    <ClInclude Include="ctoolhu\std_ext.hpp">
+      <Filter>ctoolhu</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
