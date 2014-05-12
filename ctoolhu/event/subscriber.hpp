@@ -117,8 +117,8 @@ namespace Ctoolhu {
 			std::vector<connection_type> _connections;
 		};
 
-	}; //ns Event
+	} //ns Event
 
-}; //ns Ctoolhu
+} //ns Ctoolhu
 
 #endif

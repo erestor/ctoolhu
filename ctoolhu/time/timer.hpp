@@ -41,8 +41,8 @@ namespace Ctoolhu {
 			clock_type::time_point _startTime;
 		};
 
-	}; //ns Time
+	} //ns Time
 
-}; //ns Ctoolhu
+} //ns Ctoolhu
 
 #endif //file guard

@@ -56,8 +56,8 @@ namespace Ctoolhu {
 		typedef Generator<std::uniform_real<float>, float>	FloatGenerator;
 		typedef Generator<std::bernoulli_distribution>		BoolGenerator;
 
-	}; //ns Random
+	} //ns Random
 
-}; //ns Ctoolhu
+} //ns Ctoolhu
 
 #endif

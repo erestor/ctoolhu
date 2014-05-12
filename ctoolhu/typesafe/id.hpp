@@ -141,8 +141,8 @@ namespace Ctoolhu {
 #endif
 		};
 
-	}; //ns TypeSafe
+	} //ns TypeSafe
 
-}; //ns Ctoolhu
+} //ns Ctoolhu
 
 #endif //file guard

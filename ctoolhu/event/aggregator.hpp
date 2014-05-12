@@ -48,10 +48,10 @@ namespace Ctoolhu {
 			template <class Event>
 			using SingleAggregator = Loki::SingletonHolder<Private::Aggregator<Event>>;
 
-		}; //ns Private
+		} //ns Private
 
-	}; //ns Event
+	} //ns Event
 
-}; //ns Ctoolhu
+} //ns Ctoolhu
 
 #endif

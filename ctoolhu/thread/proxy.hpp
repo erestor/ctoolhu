@@ -36,8 +36,8 @@ namespace Ctoolhu {
 			T *_client;
 		};
 
-	}; //ns Thread
+	} //ns Thread
 
-}; //ns Ctoolhu
+} //ns Ctoolhu
 
 #endif //file guard

@@ -30,8 +30,8 @@ namespace Ctoolhu {
 			Mutex _mutex;
   		};
 
-	}; //ns Thread
+	} //ns Thread
 
-}; //ns Ctoolhu
+} //ns Ctoolhu
 
 #endif //file guard

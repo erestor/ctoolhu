@@ -16,10 +16,10 @@ namespace Ctoolhu {
 			typedef std::mt19937 RandomEngine; //random generator engine
 			typedef Loki::SingletonHolder<RandomEngine> SingleRandomEngine;
 
-		}; //ns Private
+		} //ns Private
 
-	}; //ns Random
+	} //ns Random
 
-}; //ns Ctoolhu
+} //ns Ctoolhu
 
 #endif

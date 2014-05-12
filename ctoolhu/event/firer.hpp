@@ -27,8 +27,8 @@ namespace Ctoolhu {
 			Private::SingleAggregator<Event>::Instance().Fire(e);
 		}
 
-	}; //ns Event
+	} //ns Event
 
-}; //ns Ctoolhu
+} //ns Ctoolhu
 
 #endif
