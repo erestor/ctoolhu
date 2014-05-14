@@ -5,6 +5,7 @@
 #define _ctoolhu_event_subscriber_included_
 
 #include "aggregator.hpp"
+#include "../std_ext.hpp"
 #include <boost/signals2.hpp>
 
 namespace Ctoolhu {
@@ -76,10 +77,8 @@ namespace Ctoolhu {
 			//unsubscribes custom handler by connection handle returned by Subscribe
 			void Unsubscribe(const connection_type &connection)
 			{
-				auto it = std::find_if(begin(_connections), end(_connections), [](const connection_type &stored) {
-					return stored == connection;
-				});
-				if (it) {
+				auto it = std_ext::find(_connections, connection);
+				if (it != _connections.end()) {
 					if (it->connected())
 						it->disconnect();
 
