@@ -23,6 +23,13 @@ namespace std_ext {
 		c.erase(remove_if(c, p), end(c));
 	}
 
+	template <class Container, class Value>
+	auto find(Container &c, const Value &v)
+		-> decltype(std::find(begin(c), end(c), v))
+	{
+		return std::find(begin(c), end(c), v);
+	}
+
 	template <class Container, class Predicate>
 	auto find_if(Container &c, const Predicate &p)
 		-> decltype(std::find_if(begin(c), end(c), p))
@@ -35,6 +42,12 @@ namespace std_ext {
 		-> decltype(std::remove_if(begin(c), end(c), p))
 	{
 		return std::remove_if(begin(c), end(c), p);
+	}
+
+	template <class Container>
+	void sort(Container &c)
+	{
+		std::sort(begin(c), end(c));
 	}
 
 	template <class Container, class Comparator>
