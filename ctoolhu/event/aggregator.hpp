@@ -32,7 +32,7 @@ namespace Ctoolhu {
 					return _signal.connect(handler);
 				}
 
-				void Fire(Event &e)
+				void Fire(Event &e) const
 				{
 					_signal(&e);
 				}
