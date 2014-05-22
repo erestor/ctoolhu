@@ -32,6 +32,11 @@ namespace Ctoolhu {
 					return _signal.connect(handler);
 				}
 
+				void Fire(const Event &e) const
+				{
+					_signal(const_cast<Event *>(&e)); //TODO is there a type-safe way? I.e., can we have more than one signal_type?
+				}
+
 				void Fire(Event &e) const
 				{
 					_signal(&e);

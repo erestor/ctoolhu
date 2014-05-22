@@ -20,7 +20,14 @@ namespace Ctoolhu {
 			Private::SingleAggregator<Event>::Instance().Fire(Loki::SingletonHolder<Event>::Instance());
 		}
 
-		//for firing full events
+		//for firing const events with data
+		template <class Event>
+		void Fire(const Event &e)
+		{
+			Private::SingleAggregator<Event>::Instance().Fire(e);
+		}
+
+		//for firing events with data expecting some data back
 		template <class Event>
 		void Fire(Event &e)
 		{
