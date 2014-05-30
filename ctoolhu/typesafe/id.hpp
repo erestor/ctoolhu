@@ -47,8 +47,7 @@ namespace Ctoolhu {
 
 			friend std::ostream &operator <<(std::ostream &out, const self_type &storage)
 			{
-				out << storage._id;
-				return out;
+				return out << storage._id;
 			}
 
 		  protected:
