@@ -17,6 +17,12 @@ namespace std_ext {
 		return std::any_of(std::cbegin(c), std::cend(c), p);
 	}
 
+	template <class LookupContainer>
+	bool contains(const LookupContainer &c, const typename LookupContainer::value_type &v)
+	{
+		return c.find(v) != c.end();
+	}
+
 	template <class Container, class Predicate>
 	auto erase_if(Container &c, const Predicate &p)
 		-> decltype(c.erase(remove_if(c, p), std::end(c)))
@@ -24,8 +30,8 @@ namespace std_ext {
 		return c.erase(remove_if(c, p), std::end(c));
 	}
 
-	template <class Container, class Value>
-	auto find(Container &c, const Value &v)
+	template <class Container>
+	auto find(Container &c, const typename Container::value_type &v)
 		-> decltype(std::find(std::begin(c), std::end(c), v))
 	{
 		return std::find(std::begin(c), std::end(c), v);
