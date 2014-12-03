@@ -24,6 +24,10 @@ What next?
 
 - add more components as they come up in production
 
+Who uses it?
+
+- Skolaris timetable optimisation tool (http://skolaris.net)
+
 Licence
 
 - MIT
