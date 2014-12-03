@@ -24,3 +24,6 @@ What next?
 
 - add more components as they come up in production
 
+Licence
+
+- MIT
