@@ -17,6 +17,13 @@ namespace std_ext {
 		return std::any_of(std::cbegin(c), std::cend(c), p);
 	}
 
+	template <class Destination, class Source>
+	auto concat_move(Destination &d, Source &s)
+		-> decltype(std::move(std::begin(s), std::end(s), std::back_inserter(d)))
+	{
+		return std::move(std::begin(s), std::end(s), std::back_inserter(d));
+	}
+
 	template <class LookupContainer>
 	bool contains(const LookupContainer &c, const typename LookupContainer::value_type &v)
 	{
