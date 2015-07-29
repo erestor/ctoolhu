@@ -14,9 +14,15 @@ namespace Ctoolhu {
 		//provides effortless subscription of event handlers for events given as template parameters to the event aggregator -
 		//- inheriting from this class will subscribe default event handlers automatically upon object construction
 		//- compile-time error will occurr if the handler isn't implemented
-		template <class... EventTypes> class Subscriber {};
+		template <class... EventTypes> class Subscriber {
+		  protected:
+			virtual void on() {}
+		};
+
 		template <class Event, class... EventTypes> //events we're subscribing for
 		class Subscriber<Event, EventTypes...> : private Subscriber<EventTypes...> {
+
+			typedef Subscriber<EventTypes...> base_t;
 
 		  protected:
 
@@ -37,9 +43,10 @@ namespace Ctoolhu {
 			Subscriber(const Subscriber &) = delete;
 			Subscriber &operator =(const Subscriber &) = delete;
 
-		  private:
-
+			using base_t::on;
 			virtual void on(Event *) = 0;	//override this in the child class
+
+		  private:
 
 			connection_type _connection;
 		};

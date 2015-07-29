@@ -65,7 +65,7 @@ namespace Ctoolhu {
 
 			operator IdType() const
 			{
-				return _id;
+				return this->_id;
 			}
 
 		  protected:
@@ -81,7 +81,7 @@ namespace Ctoolhu {
 
 			explicit operator IdType() const
 			{
-				return _id;
+				return this->_id;
 			}
 
 		  protected:
@@ -118,7 +118,7 @@ namespace Ctoolhu {
 				: _val(_id)
 #endif
 			{
-				_id = id;
+				this->_id = id;
 			}
 
 #ifdef _DEBUG

@@ -40,7 +40,7 @@ namespace Ctoolhu {
 		template <
 			int LowerBound,
 			int UpperBound,
-			class Distribution = std::uniform_int<>
+			class Distribution = std::uniform_int_distribution<>
 		>
 		class StaticGenerator : public RandomGenerator<Distribution> {
 
@@ -51,9 +51,9 @@ namespace Ctoolhu {
 		};
 
 		//expose typical usages of the dynamic generator
-		typedef Generator<std::uniform_int<>>				IntGenerator;
+		typedef Generator<std::uniform_int_distribution<>>	IntGenerator;
 		typedef Generator<boost::uniform_smallint<>>		SmallIntGenerator;
-		typedef Generator<std::uniform_real<float>, float>	FloatGenerator;
+		typedef Generator<std::uniform_real_distribution<float>, float>	FloatGenerator;
 		typedef Generator<std::bernoulli_distribution>		BoolGenerator;
 
 	} //ns Random
