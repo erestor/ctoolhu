@@ -32,9 +32,9 @@ namespace std_ext {
 
 	template <class Container, class Predicate>
 	auto erase_if(Container &c, const Predicate &p)
-		-> decltype(c.erase(remove_if(c, p), std::end(c)))
+		-> decltype(c.erase(std::remove_if(std::begin(c), std::end(c), p), std::end(c)))
 	{
-		return c.erase(remove_if(c, p), std::end(c));
+		return c.erase(std::remove_if(std::begin(c), std::end(c), p), std::end(c));
 	}
 
 	template <class Container>

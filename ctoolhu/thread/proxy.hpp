@@ -18,9 +18,16 @@ namespace Ctoolhu {
 				_client->Lock();
 			}
 
+			LockingProxy(LockingProxy &&src)
+			{
+				_client = src._client;
+				src._client = nullptr;
+			}
+
 			~LockingProxy()
 			{
-				_client->Unlock();
+				if (_client)
+					_client->Unlock();
 			}
 
 			T *operator ->() const
