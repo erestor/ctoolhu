@@ -1,3 +1,6 @@
+//----------------------------------------------------------------------------
+// Author:		Martin Klemsa
+//----------------------------------------------------------------------------
 #ifndef _ctoolhu_thread_proxy_included_
 #define _ctoolhu_thread_proxy_included_
 

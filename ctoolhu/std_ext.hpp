@@ -1,7 +1,12 @@
+//----------------------------------------------------------------------------
+// Author:		Martin Klemsa
+//----------------------------------------------------------------------------
 #ifndef _ctoolhu_std_ext_included_
 #define _ctoolhu_std_ext_included_
 
 #include <algorithm>
+
+//this is a std extension by purpose, so will stay outside the Ctoolhu namespace
 
 namespace std_ext {
 

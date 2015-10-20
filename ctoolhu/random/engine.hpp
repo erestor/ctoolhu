@@ -22,4 +22,4 @@ namespace Ctoolhu {
 
 } //ns Ctoolhu
 
-#endif
+#endif //file guard

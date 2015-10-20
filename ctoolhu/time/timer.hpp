@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 // Author:		Martin Klemsa
 //----------------------------------------------------------------------------
-#ifndef _timer_h_
-#define _timer_h_
+#ifndef _ctoolhu_time_timer_included_
+#define _ctoolhu_time_timer_included_
 
 #include <chrono>
 

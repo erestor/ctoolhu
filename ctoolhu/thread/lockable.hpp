@@ -1,3 +1,6 @@
+//----------------------------------------------------------------------------
+// Author:		Martin Klemsa
+//----------------------------------------------------------------------------
 #ifndef _ctoolhu_thread_lockable_included_
 #define _ctoolhu_thread_lockable_included_
 
