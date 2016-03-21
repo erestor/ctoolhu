@@ -32,7 +32,14 @@ namespace std_ext {
 	template <class LookupContainer>
 	bool contains(const LookupContainer &c, const typename LookupContainer::value_type &v)
 	{
-		return c.find(v) != c.end();
+		return find(c, v) != std::end(c);
+	}
+
+	template <class Container, class Predicate>
+	auto count_if(Container &c, const Predicate &p)
+		-> decltype(std::count_if(std::begin(c), std::end(c), p))
+	{
+		return std::count_if(std::begin(c), std::end(c), p);
 	}
 
 	template <class Container, class Predicate>
