@@ -29,12 +29,6 @@ namespace std_ext {
 		return std::move(std::begin(s), std::end(s), std::back_inserter(d));
 	}
 
-	template <class LookupContainer>
-	bool contains(const LookupContainer &c, const typename LookupContainer::value_type &v)
-	{
-		return find(c, v) != std::end(c);
-	}
-
 	template <class Container, class Predicate>
 	auto count_if(Container &c, const Predicate &p)
 		-> decltype(std::count_if(std::begin(c), std::end(c), p))
@@ -61,6 +55,12 @@ namespace std_ext {
 		-> decltype(std::find_if(std::begin(c), std::end(c), p))
 	{
 		return std::find_if(std::begin(c), std::end(c), p);
+	}
+
+	template <class LookupContainer>
+	bool contains(const LookupContainer &c, const typename LookupContainer::value_type &v)
+	{
+		return find(c, v) != std::end(c);
 	}
 
 	template <class Container, class Predicate>
