@@ -51,5 +51,8 @@
     <ClInclude Include="ctoolhu\std_ext.hpp">
       <Filter>ctoolhu</Filter>
     </ClInclude>
+    <ClInclude Include="ctoolhu\event\events.h">
+      <Filter>ctoolhu\event</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

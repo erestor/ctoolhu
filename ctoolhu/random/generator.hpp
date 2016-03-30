@@ -8,6 +8,11 @@
 #include <boost/random/variate_generator.hpp>
 #include <boost/random/uniform_smallint.hpp>
 
+#ifdef _DEBUG_RAND
+#include <ctoolhu/event/events.h>
+#include <ctoolhu/event/firer.hpp>
+#endif
+
 namespace Ctoolhu {
 
 	namespace Random {
@@ -34,6 +39,15 @@ namespace Ctoolhu {
 			//for bool generator
 			Generator()
 				: base_type(Private::SingleRandomEngine::Instance(), Distribution()) {}
+
+#ifdef _DEBUG_RAND
+			result_type operator()()
+			{
+				auto res = this->base_type::operator()();
+				Event::Fire(Event::Message{"random: " + to_string(res)});
+				return res;
+			}
+#endif
 		};
 
 		//generator with compile-time bounds

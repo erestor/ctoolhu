@@ -148,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ctoolhu\event\aggregator.hpp" />
+    <ClInclude Include="ctoolhu\event\events.h" />
     <ClInclude Include="ctoolhu\event\firer.hpp" />
     <ClInclude Include="ctoolhu\event\subscriber.hpp" />
     <ClInclude Include="ctoolhu\random\engine.hpp" />
