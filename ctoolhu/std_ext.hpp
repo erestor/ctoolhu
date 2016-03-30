@@ -44,10 +44,10 @@ namespace std_ext {
 	}
 
 	template <class Container>
-	auto find(Container &c, const typename Container::value_type &v)
+	auto find(const Container &c, const typename Container::value_type &v)
 		-> decltype(std::find(std::begin(c), std::end(c), v))
 	{
-		return std::find(std::begin(c), std::end(c), v);
+		return std::find(std::cbegin(c), std::cend(c), v);
 	}
 
 	template <class Container, class Predicate>
@@ -55,6 +55,13 @@ namespace std_ext {
 		-> decltype(std::find_if(std::begin(c), std::end(c), p))
 	{
 		return std::find_if(std::begin(c), std::end(c), p);
+	}
+
+	template <class Container, class Predicate>
+	auto find_if(const Container &c, const Predicate &p)
+		-> decltype(std::find_if(std::cbegin(c), std::cend(c), p))
+	{
+		return std::find_if(std::cbegin(c), std::cend(c), p);
 	}
 
 	template <class LookupContainer>
@@ -80,6 +87,25 @@ namespace std_ext {
 	void sort(Container &c, const Comparator &comp)
 	{
 		std::sort(std::begin(c), std::end(c), comp);
+	}
+
+	template <class Container>
+	void unique(Container &c)
+	{
+		c.erase(std::unique(std::begin(c), std::end(c)), std::end(c));
+	}
+
+	template <class Container, class Comparator>
+	void unique(Container &c, const Comparator &comp)
+	{
+		c.erase(std::unique(std::begin(c), std::end(c), comp), std::end(c));
+	}
+
+	template <class Container, class Sorter, class Predicate>
+	void unique(Container &c, const Sorter &s, const Predicate &p)
+	{
+		sort(c, s);
+		unique(c, p);
 	}
 }
 
