@@ -11,6 +11,7 @@
 #ifdef _DEBUG_RAND
 #include <ctoolhu/event/events.h>
 #include <ctoolhu/event/firer.hpp>
+#include <string>
 #endif
 
 namespace Ctoolhu {
@@ -44,7 +45,7 @@ namespace Ctoolhu {
 			result_type operator()()
 			{
 				auto res = this->base_type::operator()();
-				Event::Fire(Event::Message{"random: " + to_string(res)});
+				Event::Fire(Event::Message{"random: " + std::to_string(res)});
 				return res;
 			}
 #endif
