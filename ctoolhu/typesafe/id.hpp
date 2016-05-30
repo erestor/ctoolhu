@@ -18,37 +18,37 @@ namespace Ctoolhu {
 
 		  public:
 
-			bool operator ==(const self_type &comp) const
+			bool operator ==(self_type comp) const
 			{
 				return _id == comp._id;
 			}
 
-			bool operator !=(const self_type &comp) const
+			bool operator !=(self_type comp) const
 			{
 				return _id != comp._id;
 			}
 
-			bool operator <(const self_type &comp) const
+			bool operator <(self_type comp) const
 			{
 				return _id < comp._id;
 			}
 
-			bool operator >(const self_type &comp) const
+			bool operator >(self_type comp) const
 			{
 				return _id > comp._id;
 			}
 
-			bool operator <=(const self_type &comp) const
+			bool operator <=(self_type comp) const
 			{
 				return _id <= comp._id;
 			}
 
-			bool operator >=(const self_type &comp) const
+			bool operator >=(self_type comp) const
 			{
 				return _id >= comp._id;
 			}
 
-			friend std::ostream &operator <<(std::ostream &out, const self_type &storage)
+			friend std::ostream &operator <<(std::ostream &out, self_type storage)
 			{
 				return out << storage._id;
 			}

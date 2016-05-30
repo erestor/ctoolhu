@@ -16,7 +16,7 @@ namespace Ctoolhu {
 
 		  public:
 
-			LockingProxy(T *client) : _client(client)
+			explicit LockingProxy(T *client) : _client(client)
 			{
 				_client->Lock();
 			}
