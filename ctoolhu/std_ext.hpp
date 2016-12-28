@@ -84,7 +84,7 @@ namespace std_ext {
 	}
 
 	template <class Container, class Comparator>
-	void sort(Container &c, const Comparator &comp)
+	void sort(Container &c, Comparator comp)
 	{
 		std::sort(std::begin(c), std::end(c), comp);
 	}
@@ -96,13 +96,13 @@ namespace std_ext {
 	}
 
 	template <class Container, class Comparator>
-	void unique(Container &c, const Comparator &comp)
+	void unique(Container &c, Comparator comp)
 	{
 		c.erase(std::unique(std::begin(c), std::end(c), comp), std::end(c));
 	}
 
 	template <class Container, class Sorter, class Predicate>
-	void unique(Container &c, const Sorter &s, const Predicate &p)
+	void unique(Container &c, Sorter s, Predicate p)
 	{
 		sort(c, s);
 		unique(c, p);
