@@ -36,30 +36,32 @@ namespace std_ext {
 		return std::count_if(std::begin(c), std::end(c), p);
 	}
 
+	template <class Container>
+	typename Container::iterator erase(Container &c, const typename Container::value_type &v)
+	{
+		return c.erase(find(c, v));
+	}
+
 	template <class Container, class Predicate>
-	auto erase_if(Container &c, const Predicate &p)
-		-> decltype(c.erase(std::remove_if(std::begin(c), std::end(c), p), std::end(c)))
+	typename Container::iterator erase_if(Container &c, const Predicate &p)
 	{
 		return c.erase(std::remove_if(std::begin(c), std::end(c), p), std::end(c));
 	}
 
 	template <class Container>
-	auto find(const Container &c, const typename Container::value_type &v)
-		-> decltype(std::find(std::begin(c), std::end(c), v))
+	typename Container::const_iterator find(const Container &c, const typename Container::value_type &v)
 	{
 		return std::find(std::cbegin(c), std::cend(c), v);
 	}
 
 	template <class Container, class Predicate>
-	auto find_if(Container &c, const Predicate &p)
-		-> decltype(std::find_if(std::begin(c), std::end(c), p))
+	typename Container::iterator find_if(Container &c, const Predicate &p)
 	{
 		return std::find_if(std::begin(c), std::end(c), p);
 	}
 
 	template <class Container, class Predicate>
-	auto find_if(const Container &c, const Predicate &p)
-		-> decltype(std::find_if(std::cbegin(c), std::cend(c), p))
+	typename Container::const_iterator find_if(const Container &c, const Predicate &p)
 	{
 		return std::find_if(std::cbegin(c), std::cend(c), p);
 	}
@@ -71,8 +73,7 @@ namespace std_ext {
 	}
 
 	template <class Container, class Predicate>
-	auto remove_if(Container &c, const Predicate &p)
-		-> decltype(std::remove_if(std::begin(c), std::end(c), p))
+	typename Container::iterator remove_if(Container &c, const Predicate &p)
 	{
 		return std::remove_if(std::begin(c), std::end(c), p);
 	}
