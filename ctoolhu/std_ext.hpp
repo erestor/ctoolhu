@@ -10,6 +10,8 @@
 
 namespace std_ext {
 
+    template <class Container> typename Container::const_iterator find(const Container &c, const typename Container::value_type &v);
+
 	template <class Container, class Predicate>
 	bool all_of(const Container &c, const Predicate &p)
 	{
