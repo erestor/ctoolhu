@@ -15,12 +15,15 @@ namespace Ctoolhu {
 		//- inheriting from this class will subscribe default event handlers automatically upon object construction
 		//- compile-time error will occurr if the handler isn't implemented
 		template <class... EventTypes> class Subscriber {
+		  public:
+			virtual ~Subscriber() {}
+
 		  protected:
 			virtual void on() {}
 		};
 
 		template <class Event, class... EventTypes> //events we're subscribing for
-		class Subscriber<Event, EventTypes...> : private Subscriber<EventTypes...> {
+		class Subscriber<Event, EventTypes...> : Subscriber<EventTypes...> {
 
 			typedef Subscriber<EventTypes...> base_t;
 
@@ -95,7 +98,7 @@ namespace Ctoolhu {
 		  protected:
 
 			ManualSubscriber() = default;
-			ManualSubscriber(handler_type handler)
+			explicit ManualSubscriber(handler_type handler)
 			{
 				Subscribe(handler);
 			}
