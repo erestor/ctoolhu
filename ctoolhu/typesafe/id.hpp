@@ -118,7 +118,7 @@ namespace Ctoolhu {
 
 			explicit Id(IdType id)
 #ifdef _DEBUG
-				: _val(_id)
+				: _val(this->_id)
 #endif
 			{
 				this->_id = id;
@@ -126,14 +126,14 @@ namespace Ctoolhu {
 
 #ifdef _DEBUG
 			Id(const Id &src)
-				: _val(_id)
+				: _val(this->_id)
 			{
-				_id = src._id;
+				this->_id = src._id;
 			}
 
 			Id &operator =(const Id &src)
 			{
-				_id = src._id;
+				this->_id = src._id;
 				return *this;
 			}
 
