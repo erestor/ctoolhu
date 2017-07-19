@@ -25,15 +25,13 @@ namespace std_ext {
 	}
 
 	template <class Destination, class Source>
-	auto concat_move(Destination &d, Source &s)
-		-> decltype(std::move(std::begin(s), std::end(s), std::back_inserter(d)))
+	auto concat_move(Destination &d, Source &s) -> decltype(auto)
 	{
 		return std::move(std::begin(s), std::end(s), std::back_inserter(d));
 	}
 
 	template <class Container, class Predicate>
-	auto count_if(Container &c, const Predicate &p)
-		-> decltype(std::count_if(std::begin(c), std::end(c), p))
+	auto count_if(Container &c, const Predicate &p) -> decltype(auto)
 	{
 		return std::count_if(std::begin(c), std::end(c), p);
 	}
@@ -72,6 +70,12 @@ namespace std_ext {
 	bool contains(const LookupContainer &c, const typename LookupContainer::value_type &v)
 	{
 		return find(c, v) != std::end(c);
+	}
+
+	template <class Container, class Predicate>
+	typename Container::const_iterator max_element(const Container &c, const Predicate &p)
+	{
+		return std::max_element(std::begin(c), std::end(c), p);
 	}
 
 	template <class Container, class Predicate>
