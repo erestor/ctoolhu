@@ -88,7 +88,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <AdditionalIncludeDirectories>D:\Projects\loki\loki-0.1.7\include;D:\Projects\boost\boost_1_64_0;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Projects\loki\loki-0.1.7\include;D:\Projects\boost\boost_1_65_0;</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <CompileAsManaged>false</CompileAsManaged>
     </ClCompile>
@@ -103,7 +103,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <AdditionalIncludeDirectories>D:\Projects\loki\loki-0.1.7\include;D:\Projects\boost\boost_1_64_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Projects\loki\loki-0.1.7\include;D:\Projects\boost\boost_1_65_0</AdditionalIncludeDirectories>
       <CompileAsManaged>false</CompileAsManaged>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -118,7 +118,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <AdditionalIncludeDirectories>D:\Projects\loki\loki-0.1.7\include;D:\Projects\boost\boost_1_64_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Projects\loki\loki-0.1.7\include;D:\Projects\boost\boost_1_65_0</AdditionalIncludeDirectories>
       <CompileAsManaged>false</CompileAsManaged>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -133,7 +133,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <AdditionalIncludeDirectories>D:\Projects\loki\loki-0.1.7\include;D:\Projects\boost\boost_1_64_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Projects\loki\loki-0.1.7\include;D:\Projects\boost\boost_1_65_0</AdditionalIncludeDirectories>
       <CompileAsManaged>false</CompileAsManaged>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
