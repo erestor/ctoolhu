@@ -30,6 +30,20 @@ namespace std_ext {
 		return std::move(std::begin(s), std::end(s), std::back_inserter(d));
 	}
 
+	template <class LookupContainer>
+	bool contains(const LookupContainer &c, const typename LookupContainer::value_type &v)
+	{
+		return find(c, v) != std::end(c);
+	}
+
+	template <class LookupContainer>
+	bool contains_any(const LookupContainer &c, const LookupContainer &n)
+	{
+		return any_of(n, [&c](auto &v) {
+			return contains(c, v);
+		});
+	}
+
 	template <class Container, class Predicate>
 	auto count_if(Container &c, const Predicate &p) -> decltype(auto)
 	{
@@ -64,12 +78,6 @@ namespace std_ext {
 	typename Container::const_iterator find_if(const Container &c, const Predicate &p)
 	{
 		return std::find_if(std::cbegin(c), std::cend(c), p);
-	}
-
-	template <class LookupContainer>
-	bool contains(const LookupContainer &c, const typename LookupContainer::value_type &v)
-	{
-		return find(c, v) != std::end(c);
 	}
 
 	template <class Container, class Predicate>
