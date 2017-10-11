@@ -25,8 +25,16 @@ namespace std_ext {
 	}
 
 	template <class Destination, class Source>
+	auto concat(Destination &d, Source &s) -> decltype(auto)
+	{
+		d.reserve(d.size() + s.size());
+		return std::copy(std::begin(s), std::end(s), std::back_inserter(d));
+	}
+
+	template <class Destination, class Source>
 	auto concat_move(Destination &d, Source &s) -> decltype(auto)
 	{
+		d.reserve(d.size() + s.size());
 		return std::move(std::begin(s), std::end(s), std::back_inserter(d));
 	}
 
