@@ -5,12 +5,19 @@
 #define _ctoolhu_std_ext_included_
 
 #include <algorithm>
+#include <numeric>
 
 //this is a std extension by purpose, so will stay outside the Ctoolhu namespace
 
 namespace std_ext {
 
     template <class Container> typename Container::const_iterator find(const Container &c, const typename Container::value_type &v);
+
+	template <class Container, class Sum>
+	Sum accumulate(const Container &c, Sum init)
+	{
+		return std::accumulate(std::cbegin(c), std::cend(c), init);
+	}
 
 	template <class Container, class Predicate>
 	bool all_of(const Container &c, const Predicate &p)
@@ -112,20 +119,23 @@ namespace std_ext {
 		std::sort(std::begin(c), std::end(c), comp);
 	}
 
+	//removes duplicate values from the container
 	template <class Container>
 	void unique(Container &c)
 	{
 		c.erase(std::unique(std::begin(c), std::end(c)), std::end(c));
 	}
 
+	//removes duplicate values from the container
 	template <class Container, class Comparator>
 	void unique(Container &c, Comparator comp)
 	{
 		c.erase(std::unique(std::begin(c), std::end(c), comp), std::end(c));
 	}
 
+	//sorts and removes duplicate values from the container
 	template <class Container, class Sorter, class Predicate>
-	void unique(Container &c, Sorter s, Predicate p)
+	void sort_unique(Container &c, Sorter s, Predicate p)
 	{
 		sort(c, s);
 		unique(c, p);
