@@ -62,7 +62,7 @@ namespace std_ext {
 	template <class Container, class Predicate>
 	auto count_if(Container &c, const Predicate &p) -> decltype(auto)
 	{
-		return std::count_if(std::begin(c), std::end(c), p);
+		return std::count_if(std::cbegin(c), std::cend(c), p);
 	}
 
 	template <class Container>
@@ -89,6 +89,7 @@ namespace std_ext {
 		return std::find_if(std::begin(c), std::end(c), p);
 	}
 
+	//const version of the above
 	template <class Container, class Predicate>
 	typename Container::const_iterator find_if(const Container &c, const Predicate &p)
 	{
@@ -98,7 +99,13 @@ namespace std_ext {
 	template <class Container, class Predicate>
 	typename Container::const_iterator max_element(const Container &c, const Predicate &p)
 	{
-		return std::max_element(std::begin(c), std::end(c), p);
+		return std::max_element(std::cbegin(c), std::cend(c), p);
+	}
+
+	template <class Container>
+	typename Container::const_iterator min_element(const Container &c)
+	{
+		return std::min_element(std::cbegin(c), std::cend(c));
 	}
 
 	template <class Container, class Predicate>
