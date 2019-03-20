@@ -13,10 +13,16 @@ namespace std_ext {
 
     template <class Container> typename Container::const_iterator find(const Container &c, const typename Container::value_type &v);
 
-	template <class Container, class Sum>
+	template <class Container, typename Sum>
 	Sum accumulate(const Container &c, Sum init)
 	{
 		return std::accumulate(std::cbegin(c), std::cend(c), init);
+	}
+
+	template <class Container, typename Reductor, typename Sum>
+	Sum accumulate(const Container &c, Sum init, const Reductor &r)
+	{
+		return std::accumulate(std::cbegin(c), std::cend(c), init, r);
 	}
 
 	template <class Container, class Predicate>
