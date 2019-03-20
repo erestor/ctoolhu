@@ -42,7 +42,7 @@ namespace Ctoolhu {
 				: base_type(Private::SingleRandomEngine::Instance(), Distribution()) {}
 
 #ifdef _DEBUG_RAND
-			result_type operator()()
+			auto operator()()
 			{
 				auto res = this->base_type::operator()();
 				Event::Fire(Event::Message{"random: " + std::to_string(res)});
