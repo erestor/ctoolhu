@@ -147,6 +147,14 @@ namespace std_ext {
 	}
 
 	//sorts and removes duplicate values from the container
+	template <class Container>
+	void sort_unique(Container &c)
+	{
+		sort(c);
+		unique(c);
+	}
+
+	//sorts and removes duplicate values from the container
 	template <class Container, class Sorter, class Predicate>
 	void sort_unique(Container &c, Sorter s, Predicate p)
 	{
