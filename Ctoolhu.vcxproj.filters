@@ -19,6 +19,9 @@
     <Filter Include="ctoolhu\time">
       <UniqueIdentifier>{68924fab-8aef-4ecc-b0f5-0dcc8123f63c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ctoolhu\maths">
+      <UniqueIdentifier>{774ad2a9-9fac-4842-bf34-d3f9c10619da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ctoolhu\event\aggregator.hpp">
@@ -53,6 +56,9 @@
     </ClInclude>
     <ClInclude Include="ctoolhu\event\events.h">
       <Filter>ctoolhu\event</Filter>
+    </ClInclude>
+    <ClInclude Include="ctoolhu\maths\comparer.hpp">
+      <Filter>ctoolhu\maths</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
