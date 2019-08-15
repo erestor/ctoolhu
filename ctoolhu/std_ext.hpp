@@ -132,34 +132,30 @@ namespace std_ext {
 		std::sort(std::begin(c), std::end(c), comp);
 	}
 
-	//removes duplicate values from the container
 	template <class Container>
-	void unique(Container &c)
+	auto unique(Container &c) -> decltype(auto)
 	{
-		c.erase(std::unique(std::begin(c), std::end(c)), std::end(c));
+		return std::unique(std::begin(c), std::end(c));
 	}
 
-	//removes duplicate values from the container
 	template <class Container, class Comparator>
-	void unique(Container &c, Comparator comp)
+	auto unique(Container &c, Comparator comp) -> decltype(auto)
 	{
-		c.erase(std::unique(std::begin(c), std::end(c), comp), std::end(c));
+		return std::unique(std::begin(c), std::end(c), comp);
 	}
 
-	//sorts and removes duplicate values from the container
+	//removes duplicate values from given sorted container
 	template <class Container>
-	void sort_unique(Container &c)
+	void erase_duplicates(Container &c)
 	{
-		sort(c);
-		unique(c);
+		c.erase(unique(c), std::end(c));
 	}
 
-	//sorts and removes duplicate values from the container
-	template <class Container, class Sorter, class Predicate>
-	void sort_unique(Container &c, Sorter s, Predicate p)
+	//removes duplicate values from given sorted container
+	template <class Container, class Comparator>
+	void erase_duplicates(Container &c, Comparator comp)
 	{
-		sort(c, s);
-		unique(c, p);
+		c.erase(unique(c, comp), std::end(c));
 	}
 }
 
