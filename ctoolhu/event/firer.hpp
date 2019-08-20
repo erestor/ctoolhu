@@ -5,7 +5,7 @@
 #define _ctoolhu_event_firer_included_
 
 #include "aggregator.hpp"
-#include <loki/Singleton.h>
+#include "../singleton/holder.hpp"
 #include <type_traits>
 
 namespace Ctoolhu {
@@ -17,7 +17,7 @@ namespace Ctoolhu {
 		void Fire()
 		{
 			static_assert(std::is_empty<Event>::value, "can't fire events with parameters by type only");
-			Private::SingleAggregator<Event>::Instance().Fire(Loki::SingletonHolder<Event>::Instance());
+			Private::SingleAggregator<Event>::Instance().Fire(Singleton::Holder<Event>::Instance());
 		}
 
 		//for firing const events with data

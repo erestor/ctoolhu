@@ -4,8 +4,8 @@
 #ifndef _ctoolhu_random_engine_included_
 #define _ctoolhu_random_engine_included_
 
+#include "../singleton/holder.hpp"
 #include <random>
-#include <loki/Singleton.h>
 
 namespace Ctoolhu {
 
@@ -14,7 +14,7 @@ namespace Ctoolhu {
 		namespace Private {
 			
 			typedef std::mt19937 RandomEngine; //random generator engine
-			typedef Loki::SingletonHolder<RandomEngine> SingleRandomEngine;
+			typedef Singleton::Holder<RandomEngine> SingleRandomEngine;
 
 		} //ns Private
 

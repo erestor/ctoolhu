@@ -4,8 +4,9 @@
 #ifndef _ctoolhu_event_aggregator_included_
 #define _ctoolhu_event_aggregator_included_
 
-#include <boost/signals2.hpp>
+#include "../singleton/holder.hpp"
 #include <loki/Singleton.h>
+#include <boost/signals2.hpp>
 
 namespace Ctoolhu {
 	
@@ -51,7 +52,7 @@ namespace Ctoolhu {
 			};
 
 			template <class Event>
-			using SingleAggregator = Loki::SingletonHolder<Private::Aggregator<Event>>;
+			using SingleAggregator = Singleton::Holder<Private::Aggregator<Event>>;
 
 		} //ns Private
 
