@@ -38,14 +38,14 @@ namespace std_ext {
 	}
 
 	template <class Destination, class Source>
-	auto concat(Destination &d, Source &s) -> decltype(auto)
+	auto concat(Destination &d, Source &s)
 	{
 		d.reserve(d.size() + s.size());
 		return std::copy(std::begin(s), std::end(s), std::back_inserter(d));
 	}
 
 	template <class Destination, class Source>
-	auto concat_move(Destination &d, Source &s) -> decltype(auto)
+	auto concat_move(Destination &d, Source &s)
 	{
 		d.reserve(d.size() + s.size());
 		return std::move(std::begin(s), std::end(s), std::back_inserter(d));
@@ -60,13 +60,13 @@ namespace std_ext {
 	template <class LookupContainer>
 	bool contains_any(const LookupContainer &c, const LookupContainer &n)
 	{
-		return any_of(n, [&c](auto &v) {
+		return any_of(n, [&c](auto const &v) {
 			return contains(c, v);
 		});
 	}
 
 	template <class Container, class Predicate>
-	auto count_if(Container &c, const Predicate &p) -> decltype(auto)
+	auto count_if(Container &c, const Predicate &p)
 	{
 		return std::count_if(std::cbegin(c), std::cend(c), p);
 	}
@@ -133,13 +133,13 @@ namespace std_ext {
 	}
 
 	template <class Container>
-	auto unique(Container &c) -> decltype(auto)
+	auto unique(Container &c)
 	{
 		return std::unique(std::begin(c), std::end(c));
 	}
 
 	template <class Container, class Comparator>
-	auto unique(Container &c, Comparator comp) -> decltype(auto)
+	auto unique(Container &c, Comparator comp)
 	{
 		return std::unique(std::begin(c), std::end(c), comp);
 	}
