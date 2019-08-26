@@ -66,5 +66,14 @@
     <ClInclude Include="ctoolhu\singleton\holder.hpp">
       <Filter>ctoolhu\singleton</Filter>
     </ClInclude>
+    <ClInclude Include="ctoolhu\thread\pool.hpp">
+      <Filter>ctoolhu\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ctoolhu\thread\queue.hpp">
+      <Filter>ctoolhu\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ctoolhu\thread\future.hpp">
+      <Filter>ctoolhu\thread</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

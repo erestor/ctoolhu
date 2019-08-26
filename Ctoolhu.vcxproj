@@ -156,8 +156,11 @@
     <ClInclude Include="ctoolhu\random\generator.hpp" />
     <ClInclude Include="ctoolhu\singleton\holder.hpp" />
     <ClInclude Include="ctoolhu\std_ext.hpp" />
+    <ClInclude Include="ctoolhu\thread\future.hpp" />
     <ClInclude Include="ctoolhu\thread\lockable.hpp" />
+    <ClInclude Include="ctoolhu\thread\pool.hpp" />
     <ClInclude Include="ctoolhu\thread\proxy.hpp" />
+    <ClInclude Include="ctoolhu\thread\queue.hpp" />
     <ClInclude Include="ctoolhu\time\timer.hpp" />
     <ClInclude Include="ctoolhu\typesafe\id.hpp" />
   </ItemGroup>
