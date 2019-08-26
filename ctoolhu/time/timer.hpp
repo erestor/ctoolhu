@@ -18,8 +18,8 @@ namespace Ctoolhu {
 
 		  public:
 
-			typedef Resolution duration_type;
-			typedef std::chrono::steady_clock clock_type;
+			using duration_type = Resolution;
+			using clock_type = std::chrono::steady_clock;
 
 			Timer()
 			{

@@ -29,7 +29,7 @@ namespace Ctoolhu {
 		>
 		class Generator : public RandomGenerator<Distribution> {
 	
-			typedef RandomGenerator<Distribution> base_type;
+			using base_type = RandomGenerator<Distribution>;
 
 		  public:
 
@@ -66,10 +66,10 @@ namespace Ctoolhu {
 		};
 
 		//expose typical usages of the dynamic generator
-		typedef Generator<std::uniform_int_distribution<>>	IntGenerator;
-		typedef Generator<boost::uniform_smallint<>>		SmallIntGenerator;
-		typedef Generator<std::uniform_real_distribution<float>, float>	FloatGenerator;
-		typedef Generator<std::bernoulli_distribution>		BoolGenerator;
+		using IntGenerator =		Generator<std::uniform_int_distribution<>>;
+		using SmallIntGenerator =	Generator<boost::uniform_smallint<>>;
+		using FloatGenerator =		Generator<std::uniform_real_distribution<float>, float>;
+		using BoolGenerator =		Generator<std::bernoulli_distribution>;
 
 	} //ns Random
 

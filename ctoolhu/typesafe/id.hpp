@@ -14,7 +14,7 @@ namespace Ctoolhu {
 		template <typename IdType>
 		class Storage {
 			
-			typedef Storage<IdType> self_type;
+			using self_type = Storage<IdType>;
 
 		  public:
 
@@ -113,8 +113,8 @@ namespace Ctoolhu {
 
 		  public:
 
-			typedef RequestingObject object_type;
-			typedef IdType id_type;
+			using object_type = RequestingObject;
+			using id_type = IdType;
 
 			explicit Id(IdType id)
 #ifdef _DEBUG

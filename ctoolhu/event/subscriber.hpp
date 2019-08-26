@@ -25,7 +25,7 @@ namespace Ctoolhu {
 		template <class Event, class... EventTypes> //events we're subscribing for
 		class Subscriber<Event, EventTypes...> : Subscriber<EventTypes...> {
 
-			typedef Subscriber<EventTypes...> base_t;
+			using base_t = Subscriber<EventTypes...>;
 
 		  protected:
 

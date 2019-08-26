@@ -12,7 +12,7 @@ namespace Ctoolhu {
 	
 	namespace Event {
 
-		typedef boost::signals2::connection connection_type;
+		using connection_type = boost::signals2::connection;
 
 		namespace Private {
 
@@ -25,8 +25,8 @@ namespace Ctoolhu {
 				Aggregator(const Aggregator &) = delete;
 				Aggregator &operator =(const Aggregator &) = delete;
 
-				typedef boost::signals2::signal<void (Event *)> signal_type;
-				typedef typename signal_type::slot_type slot_type; 
+				using signal_type = boost::signals2::signal<void (Event *)>;
+				using slot_type = typename signal_type::slot_type;
 			  
 				connection_type Subscribe(const slot_type &handler)
 				{

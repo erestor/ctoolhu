@@ -13,8 +13,8 @@ namespace Ctoolhu {
 	
 		namespace Private {
 			
-			typedef std::mt19937 RandomEngine; //random generator engine
-			typedef Singleton::Holder<RandomEngine> SingleRandomEngine;
+			using RandomEngine = std::mt19937; //random generator engine
+			using SingleRandomEngine = Singleton::Holder<RandomEngine>;
 
 		} //ns Private
 
