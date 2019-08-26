@@ -96,9 +96,7 @@ namespace Ctoolhu {
 		  public:
 
 			explicit Pool(unsigned int numThreads)
-			:	_done{false},
-				_workQueue{},
-				_threads{}
+				: _done{false}
 			{
 				try {
 					for (unsigned int i{0u}; i < numThreads; ++i)
@@ -110,9 +108,8 @@ namespace Ctoolhu {
 				}
 			}
 
-			Pool() : Pool{std::max(std::thread::hardware_concurrency(), 1u)} //always create at least one thread (hardware_concurrency can return 0)
-			{
-			}
+			Pool()
+				: Pool{std::max(std::thread::hardware_concurrency(), 1u)} {} //always create at least one thread by default(hardware_concurrency can return 0)
 
 			~Pool()
 			{
