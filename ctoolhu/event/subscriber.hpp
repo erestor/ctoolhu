@@ -15,10 +15,13 @@ namespace Ctoolhu {
 		//- inheriting from this class will subscribe default event handlers automatically upon object construction
 		//- compile-time error will occurr if the handler isn't implemented
 		template <class... EventTypes> class Subscriber {
+
 		  public:
-			virtual ~Subscriber() {}
+
+			virtual ~Subscriber() = default;
 
 		  protected:
+
 			virtual void on() {}
 		};
 
@@ -51,7 +54,7 @@ namespace Ctoolhu {
 
 		  private:
 
-			connection_type _connection;
+			connection_t _connection;
 		};
 
 
@@ -67,7 +70,7 @@ namespace Ctoolhu {
 			using handler_type = void (HandlerHolder::*)(Event *);
 
 			//subscribes a given custom handler which is a member method of the child class
-			connection_type Subscribe(handler_type handler)
+			connection_t Subscribe(handler_type handler)
 			{
 				return Store(Private::SingleAggregator<Event>::Instance().Subscribe([=](Event *e) {
 					(static_cast<HandlerHolder *>(this)->*handler)(e);
@@ -76,7 +79,7 @@ namespace Ctoolhu {
 
 			//subscribes a handler of some other type
 			template <typename OtherHandler>
-			connection_type Subscribe(const OtherHandler &handler)
+			connection_t Subscribe(const OtherHandler &handler)
 			{
 				return Store(Private::SingleAggregator<Event>::Instance().Subscribe([handler](Event *e) {
 					handler(e);
@@ -84,7 +87,7 @@ namespace Ctoolhu {
 			}
 
 			//unsubscribes custom handler by connection handle returned by Subscribe
-			void Unsubscribe(const connection_type &conn)
+			void Unsubscribe(const connection_t &conn)
 			{
 				auto it = std::find(_connections.begin(), _connections.end(), conn);
 				if (it != _connections.end()) {
@@ -116,13 +119,13 @@ namespace Ctoolhu {
 
 		  private:
 
-			connection_type Store(const connection_type &conn)
+			connection_t Store(const connection_t &conn)
 			{
 				_connections.push_back(conn);
 				return conn;
 			}
 
-			std::vector<connection_type> _connections;
+			std::vector<connection_t> _connections;
 		};
 
 	} //ns Event

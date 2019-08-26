@@ -18,8 +18,8 @@ namespace Ctoolhu {
 
 		  public:
 
-			using duration_type = Resolution;
-			using clock_type = std::chrono::steady_clock;
+			using duration_t = Resolution;
+			using clock_t = std::chrono::steady_clock;
 
 			Timer()
 			{
@@ -28,17 +28,17 @@ namespace Ctoolhu {
 
 			void StartClock()
 			{
-				_startTime = clock_type::now();
+				_startTime = clock_t::now();
 			}
 
-			duration_type ElapsedTime() const
+			duration_t ElapsedTime() const
 			{
-				return std::chrono::duration_cast<duration_type>(clock_type::now() - _startTime);
+				return std::chrono::duration_cast<duration_t>(clock_t::now() - _startTime);
 			}
 
 		  private:
 
-			clock_type::time_point _startTime;
+			clock_t::time_point _startTime;
 		};
 
 	} //ns Time

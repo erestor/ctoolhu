@@ -29,22 +29,22 @@ namespace Ctoolhu {
 		>
 		class Generator : public RandomGenerator<Distribution> {
 	
-			using base_type = RandomGenerator<Distribution>;
+			using base_t = RandomGenerator<Distribution>;
 
 		  public:
 
 			//for number generators
 			Generator(Boundary lower, Boundary upper)
-				: base_type(Private::SingleRandomEngine::Instance(), Distribution(lower, upper)) {}
+				: base_t(Private::SingleRandomEngine::Instance(), Distribution(lower, upper)) {}
 
 			//for bool generator
 			Generator()
-				: base_type(Private::SingleRandomEngine::Instance(), Distribution()) {}
+				: base_t(Private::SingleRandomEngine::Instance(), Distribution()) {}
 
 #ifdef _DEBUG_RAND
 			auto operator()()
 			{
-				auto res = this->base_type::operator()();
+				auto res = this->base_t::operator()();
 				Event::Fire(Event::Message{"random: " + std::to_string(res)});
 				return res;
 			}

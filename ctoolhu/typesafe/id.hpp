@@ -14,41 +14,41 @@ namespace Ctoolhu {
 		template <typename IdType>
 		class Storage {
 			
-			using self_type = Storage<IdType>;
+			using self_t = Storage<IdType>;
 
 		  public:
 
-			bool operator ==(self_type comp) const
+			bool operator ==(self_t comp) const
 			{
 				return _id == comp._id;
 			}
 
-			bool operator !=(self_type comp) const
+			bool operator !=(self_t comp) const
 			{
 				return _id != comp._id;
 			}
 
-			bool operator <(self_type comp) const
+			bool operator <(self_t comp) const
 			{
 				return _id < comp._id;
 			}
 
-			bool operator >(self_type comp) const
+			bool operator >(self_t comp) const
 			{
 				return _id > comp._id;
 			}
 
-			bool operator <=(self_type comp) const
+			bool operator <=(self_t comp) const
 			{
 				return _id <= comp._id;
 			}
 
-			bool operator >=(self_type comp) const
+			bool operator >=(self_t comp) const
 			{
 				return _id >= comp._id;
 			}
 
-			friend std::ostream &operator <<(std::ostream &out, self_type storage)
+			friend std::ostream &operator <<(std::ostream &out, self_t storage)
 			{
 				return out << storage._id;
 			}
@@ -113,10 +113,10 @@ namespace Ctoolhu {
 
 		  public:
 
-			using object_type = RequestingObject;
-			using id_type = IdType;
+			using object_t = RequestingObject;
+			using id_t = IdType;
 
-			explicit Id(IdType id)
+			explicit Id(id_t id)
 #ifdef _DEBUG
 				: _val(this->_id)
 #endif
@@ -139,7 +139,7 @@ namespace Ctoolhu {
 
 		  private:
 
-			const IdType &_val; //so that we can see the value readily in watch window of the debugger
+			const id_t &_val; //so that we can see the value readily in watch window of the debugger
 #endif
 		};
 
