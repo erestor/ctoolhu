@@ -20,7 +20,6 @@
 #include "../singleton/holder.hpp"
 #include <algorithm>
 #include <atomic>
-#include <cstdint>
 #include <functional>
 #include <future>
 #include <memory>
@@ -96,7 +95,6 @@ namespace Ctoolhu {
 		  public:
 
 			explicit Pool(unsigned int numThreads)
-				: _done{false}
 			{
 				try {
 					for (unsigned int i{0u}; i < numThreads; ++i)
@@ -126,13 +124,13 @@ namespace Ctoolhu {
 			auto submit(Func &&func, Args &&... args)
 			{
 				auto boundTask = std::bind(std::forward<Func>(func), std::forward<Args>(args)...);
-				using ResultType = std::result_of_t<decltype(boundTask)()>;
-				using PackagedTask = std::packaged_task<ResultType()>;
-				using TaskType = Private::ThreadTask<PackagedTask>;
+				using job_result_t = std::invoke_result_t<decltype(boundTask)>;
+				using packaged_task_t = std::packaged_task<job_result_t()>;
+				using task_t = Private::ThreadTask<packaged_task_t>;
 
-				PackagedTask task{std::move(boundTask)};
-				Future<ResultType> result{task.get_future()};
-				_workQueue.push(std::make_unique<TaskType>(std::move(task)));
+				packaged_task_t task{std::move(boundTask)};
+				Future<job_result_t> result{task.get_future()};
+				_workQueue.push(std::make_unique<task_t>(std::move(task)));
 				return result;
 			}
 
@@ -165,7 +163,7 @@ namespace Ctoolhu {
 
 			Queue<std::unique_ptr<Private::IThreadTask>> _workQueue;
 			std::vector<std::thread> _threads;
-			std::atomic_bool _done;
+			std::atomic_bool _done{false};
 		};
 
 		using SinglePool = Singleton::Holder<Pool>;

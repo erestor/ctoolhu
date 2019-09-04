@@ -156,6 +156,7 @@
     <ClInclude Include="ctoolhu\random\generator.hpp" />
     <ClInclude Include="ctoolhu\singleton\holder.hpp" />
     <ClInclude Include="ctoolhu\std_ext.hpp" />
+    <ClInclude Include="ctoolhu\thread\async.hpp" />
     <ClInclude Include="ctoolhu\thread\future.hpp" />
     <ClInclude Include="ctoolhu\thread\lockable.hpp" />
     <ClInclude Include="ctoolhu\thread\pool.hpp" />

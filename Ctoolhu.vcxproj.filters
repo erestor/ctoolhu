@@ -75,5 +75,8 @@
     <ClInclude Include="ctoolhu\thread\future.hpp">
       <Filter>ctoolhu\thread</Filter>
     </ClInclude>
+    <ClInclude Include="ctoolhu\thread\async.hpp">
+      <Filter>ctoolhu\thread</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
