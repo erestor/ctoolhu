@@ -14,41 +14,39 @@ namespace Ctoolhu {
 		template <typename IdType>
 		class Storage {
 			
-			using self_t = Storage<IdType>;
-
 		  public:
 
-			bool operator ==(self_t comp) const
+			bool operator ==(Storage comp) const
 			{
 				return _id == comp._id;
 			}
 
-			bool operator !=(self_t comp) const
+			bool operator !=(Storage comp) const
 			{
 				return _id != comp._id;
 			}
 
-			bool operator <(self_t comp) const
+			bool operator <(Storage comp) const
 			{
 				return _id < comp._id;
 			}
 
-			bool operator >(self_t comp) const
+			bool operator >(Storage comp) const
 			{
 				return _id > comp._id;
 			}
 
-			bool operator <=(self_t comp) const
+			bool operator <=(Storage comp) const
 			{
 				return _id <= comp._id;
 			}
 
-			bool operator >=(self_t comp) const
+			bool operator >=(Storage comp) const
 			{
 				return _id >= comp._id;
 			}
 
-			friend std::ostream &operator <<(std::ostream &out, self_t storage)
+			friend std::ostream &operator <<(std::ostream &out, Storage storage)
 			{
 				return out << storage._id;
 			}
@@ -118,28 +116,31 @@ namespace Ctoolhu {
 
 			explicit Id(id_t id)
 #ifdef _DEBUG
-				: _val(this->_id)
+				: _val{this->_id}
 #endif
 			{
 				this->_id = id;
 			}
 
-#ifdef _DEBUG
+#ifndef _DEBUG
+			Id(const Id &src) = default;
+			Id &operator =(const Id &) = default;
+#else
 			Id(const Id &src)
-				: _val(this->_id)
 			{
-				this->_id = src._id;
+				*this = src;
 			}
 
 			Id &operator =(const Id &src)
 			{
+				_val = src._id;
 				this->_id = src._id;
 				return *this;
 			}
 
 		  private:
 
-			const id_t &_val; //so that we can see the value readily in watch window of the debugger
+			id_t _val; //so that we can see the value readily in watch window of the debugger
 #endif
 		};
 

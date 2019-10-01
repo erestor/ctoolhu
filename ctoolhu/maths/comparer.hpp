@@ -12,7 +12,7 @@ namespace Ctoolhu {
 	namespace Maths {
 
 		//Provides simple comparison for floating point types
-		template<
+		template <
 			class Decimal = float,	//float or double
 			int Precision = 5		//numbers differing beyond this number of decimal digits are considered equal
 		>

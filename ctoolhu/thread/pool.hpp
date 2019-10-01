@@ -123,7 +123,7 @@ namespace Ctoolhu {
 			template <typename Func, typename... Args>
 			auto submit(Func &&func, Args &&... args)
 			{
-				auto boundTask = std::bind(std::forward<Func>(func), std::forward<Args>(args)...);
+				auto boundTask = std::bind(std::forward<Func>(func), std::forward<Args>(args)...); //TODO - use lambda instead?
 				using job_result_t = std::invoke_result_t<decltype(boundTask)>;
 				using packaged_task_t = std::packaged_task<job_result_t()>;
 				using task_t = Private::ThreadTask<packaged_task_t>;
