@@ -16,32 +16,32 @@ namespace Ctoolhu {
 			
 		  public:
 
-			bool operator ==(Storage comp) const
+			bool operator ==(Storage comp) const noexcept
 			{
 				return _id == comp._id;
 			}
 
-			bool operator !=(Storage comp) const
+			bool operator !=(Storage comp) const noexcept
 			{
 				return _id != comp._id;
 			}
 
-			bool operator <(Storage comp) const
+			bool operator <(Storage comp) const noexcept
 			{
 				return _id < comp._id;
 			}
 
-			bool operator >(Storage comp) const
+			bool operator >(Storage comp) const noexcept
 			{
 				return _id > comp._id;
 			}
 
-			bool operator <=(Storage comp) const
+			bool operator <=(Storage comp) const noexcept
 			{
 				return _id <= comp._id;
 			}
 
-			bool operator >=(Storage comp) const
+			bool operator >=(Storage comp) const noexcept
 			{
 				return _id >= comp._id;
 			}
@@ -53,7 +53,7 @@ namespace Ctoolhu {
 
 		  protected:
 
-			Storage() = default;
+			Storage() noexcept = default;
 
 			IdType _id;
 		};
@@ -64,14 +64,14 @@ namespace Ctoolhu {
 
 		  public:
 
-			operator IdType() const
+			operator IdType() const noexcept
 			{
 				return this->_id;
 			}
 
 		  protected:
 
-			ImplicitConversion() = default;
+			ImplicitConversion() noexcept = default;
 		};
 
 		//policy defining that the conversion to stored id type is explicit so that it cannot be mistakenly juxtaposed for the underlying type
@@ -80,14 +80,14 @@ namespace Ctoolhu {
 
 		  public:
 
-			explicit operator IdType() const
+			explicit operator IdType() const noexcept
 			{
 				return this->_id;
 			}
 
 		  protected:
 
-			ExplicitConversion() = default;
+			ExplicitConversion() noexcept = default;
 		};
 
 		//Tool for preventing mix-up of ids of different objects by means of
@@ -114,7 +114,7 @@ namespace Ctoolhu {
 			using object_t = RequestingObject;
 			using id_t = IdType;
 
-			explicit Id(id_t id)
+			explicit Id(id_t id) noexcept
 #ifdef _DEBUG
 				: _val{this->_id}
 #endif
@@ -123,15 +123,15 @@ namespace Ctoolhu {
 			}
 
 #ifndef _DEBUG
-			Id(const Id &src) = default;
-			Id &operator =(const Id &) = default;
+			Id(const Id &src) noexcept = default;
+			Id &operator =(const Id &) noexcept = default;
 #else
-			Id(const Id &src)
+			Id(const Id &src) noexcept
 			{
 				*this = src;
 			}
 
-			Id &operator =(const Id &src)
+			Id &operator =(const Id &src) noexcept
 			{
 				_val = src._id;
 				this->_id = src._id;
