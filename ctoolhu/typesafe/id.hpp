@@ -116,7 +116,7 @@ namespace Ctoolhu {
 
 			explicit Id(id_t id) noexcept
 #ifdef _DEBUG
-				: _val{this->_id}
+				: _val{id}
 #endif
 			{
 				this->_id = id;
