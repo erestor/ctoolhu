@@ -21,7 +21,7 @@ namespace Ctoolhu {
 		template <typename Func, typename... Args>
 		auto Async(Func &&job, Args &&... args)
 		{
-			return SinglePool::Instance().submit(job, args...);
+			return SinglePool::Instance().submit(std::forward<Func>(job), std::forward<Args>(args)...);
 		}
 
 	} //ns Thread
