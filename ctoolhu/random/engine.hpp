@@ -7,19 +7,11 @@
 #include "../singleton/holder.hpp"
 #include <random>
 
-namespace Ctoolhu {
+namespace Ctoolhu::Random::Private {
 
-	namespace Random {
-	
-		namespace Private {
-			
-			using RandomEngine = std::mt19937; //random generator engine
-			using SingleRandomEngine = Singleton::Holder<RandomEngine>;
+	using RandomEngine = std::mt19937; //random generator engine
+	using SingleRandomEngine = Singleton::Holder<RandomEngine>;
 
-		} //ns Private
-
-	} //ns Random
-
-} //ns Ctoolhu
+}
 
 #endif //file guard

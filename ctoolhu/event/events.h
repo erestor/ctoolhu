@@ -6,18 +6,14 @@
 
 #include <string>
 
-namespace Ctoolhu {
+namespace Ctoolhu::Event {
 
-	namespace Event {
+	//definitions of commonly useful events
 
-		//definitions of commonly useful events
+	struct Message {
+		std::string msg;
+	};
 
-		struct Message {
-			std::string msg;
-		};
-
-	} //ns Event
-
-} //ns Ctoolhu
+} //ns Ctoolhu::Event
 
 #endif

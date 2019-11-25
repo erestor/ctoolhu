@@ -28,148 +28,144 @@
 #include <utility>
 #include <vector>
 
-namespace Ctoolhu {
+namespace Ctoolhu::Thread {
 
-	namespace Thread {
+	namespace Private {
 
-		namespace Private {
+		class IThreadTask {
 
-			class IThreadTask {
+			public:
 
-			  public:
+			IThreadTask() = default;
+			virtual ~IThreadTask() = default;
 
-				IThreadTask() = default;
-				virtual ~IThreadTask() = default;
+			IThreadTask(const IThreadTask &) = delete;
+			IThreadTask &operator=(const IThreadTask &) = delete;
 
-				IThreadTask(const IThreadTask &) = delete;
-				IThreadTask &operator=(const IThreadTask &) = delete;
-
-				IThreadTask(IThreadTask &&) = default;
-				IThreadTask &operator=(IThreadTask &&) = default;
-
-				/**
-				 * Run the task.
-				 */
-				virtual void execute() = 0;
-			};
-
-			template <typename Func>
-			class ThreadTask : public IThreadTask {
-
-			  public:
-
-				ThreadTask(Func &&func)
-					: _func{std::move(func)}
-				{
-				}
-
-				~ThreadTask() override = default;
-
-				ThreadTask(const ThreadTask &) = delete;
-				ThreadTask &operator=(const ThreadTask &) = delete;
-
-				ThreadTask(ThreadTask &&) = default;
-				ThreadTask &operator=(ThreadTask &&) = default;
-
-				/**
-				 * Run the task.
-				 */
-				void execute() override
-				{
-					_func();
-				}
-
-			  private:
-
-				Func _func;
-			};
-
-		} //ns Private
-
-		/**
-		 * The Pool class.
-		 * Keeps a set of threads constantly waiting to execute incoming jobs.
-		 */
-		class Pool {
-
-		  public:
-
-			explicit Pool(unsigned int numThreads)
-			{
-				try {
-					for (unsigned int i{0u}; i < numThreads; ++i)
-						_threads.emplace_back(&Pool::worker, this);
-				}
-				catch(...) {
-					destroy();
-					throw;
-				}
-			}
-
-			Pool()
-				: Pool{std::max(std::thread::hardware_concurrency(), 1u)} {} //always create at least one thread by default(hardware_concurrency can return 0)
-
-			~Pool()
-			{
-				destroy();
-			}
-
-			Pool(const Pool &) = delete;
-			Pool &operator=(const Pool &) = delete;
+			IThreadTask(IThreadTask &&) = default;
+			IThreadTask &operator=(IThreadTask &&) = default;
 
 			/**
-			 * Submit a job to be run by the thread pool.
-			 */
-			template <typename Func, typename... Args>
-			auto submit(Func &&func, Args &&... args)
-			{
-				auto boundTask = std::bind(std::forward<Func>(func), std::forward<Args>(args)...); //TODO - use lambda instead?
-				using job_result_t = std::invoke_result_t<decltype(boundTask)>;
-				using packaged_task_t = std::packaged_task<job_result_t()>;
-				using task_t = Private::ThreadTask<packaged_task_t>;
-
-				packaged_task_t task{std::move(boundTask)};
-				Future<job_result_t> result{task.get_future()};
-				_workQueue.push(std::make_unique<task_t>(std::move(task)));
-				return result;
-			}
-
-		  private:
-
-			/**
-			 * Constantly running function each thread uses to acquire work items from the queue.
-			 */
-			void worker()
-			{
-				while (!_done) {
-					std::unique_ptr<Private::IThreadTask> task;
-					if (_workQueue.waitPop(task))
-						task->execute();
-				}
-			}
-
-			/**
-			 * Invalidates the queue and joins all running threads.
-			 */
-			void destroy()
-			{
-				_done = true;
-				_workQueue.invalidate();
-				for (auto &thread : _threads) {
-					if (thread.joinable())
-						thread.join();
-				}
-			}
-
-			Queue<std::unique_ptr<Private::IThreadTask>> _workQueue;
-			std::vector<std::thread> _threads;
-			std::atomic_bool _done{false};
+				* Run the task.
+				*/
+			virtual void execute() = 0;
 		};
 
-		using SinglePool = Singleton::Holder<Pool>;
+		template <typename Func>
+		class ThreadTask : public IThreadTask {
 
-	} //ns Thread
+			public:
 
-} //ns Ctoolhu
+			ThreadTask(Func &&func)
+				: _func{std::move(func)}
+			{
+			}
+
+			~ThreadTask() override = default;
+
+			ThreadTask(const ThreadTask &) = delete;
+			ThreadTask &operator=(const ThreadTask &) = delete;
+
+			ThreadTask(ThreadTask &&) = default;
+			ThreadTask &operator=(ThreadTask &&) = default;
+
+			/**
+				* Run the task.
+				*/
+			void execute() override
+			{
+				_func();
+			}
+
+			private:
+
+			Func _func;
+		};
+
+	} //ns Private
+
+	/**
+		* The Pool class.
+		* Keeps a set of threads constantly waiting to execute incoming jobs.
+		*/
+	class Pool {
+
+		public:
+
+		explicit Pool(unsigned int numThreads)
+		{
+			try {
+				for (unsigned int i{0u}; i < numThreads; ++i)
+					_threads.emplace_back(&Pool::worker, this);
+			}
+			catch(...) {
+				destroy();
+				throw;
+			}
+		}
+
+		Pool()
+			: Pool{std::max(std::thread::hardware_concurrency(), 1u)} {} //always create at least one thread by default(hardware_concurrency can return 0)
+
+		~Pool()
+		{
+			destroy();
+		}
+
+		Pool(const Pool &) = delete;
+		Pool &operator=(const Pool &) = delete;
+
+		/**
+			* Submit a job to be run by the thread pool.
+			*/
+		template <typename Func, typename... Args>
+		auto submit(Func &&func, Args &&... args)
+		{
+			auto boundTask = std::bind(std::forward<Func>(func), std::forward<Args>(args)...); //TODO - use lambda instead?
+			using job_result_t = std::invoke_result_t<decltype(boundTask)>;
+			using packaged_task_t = std::packaged_task<job_result_t()>;
+			using task_t = Private::ThreadTask<packaged_task_t>;
+
+			packaged_task_t task{std::move(boundTask)};
+			Future<job_result_t> result{task.get_future()};
+			_workQueue.push(std::make_unique<task_t>(std::move(task)));
+			return result;
+		}
+
+		private:
+
+		/**
+			* Constantly running function each thread uses to acquire work items from the queue.
+			*/
+		void worker()
+		{
+			while (!_done) {
+				std::unique_ptr<Private::IThreadTask> task;
+				if (_workQueue.waitPop(task))
+					task->execute();
+			}
+		}
+
+		/**
+			* Invalidates the queue and joins all running threads.
+			*/
+		void destroy()
+		{
+			_done = true;
+			_workQueue.invalidate();
+			for (auto &thread : _threads) {
+				if (thread.joinable())
+					thread.join();
+			}
+		}
+
+		Queue<std::unique_ptr<Private::IThreadTask>> _workQueue;
+		std::vector<std::thread> _threads;
+		std::atomic_bool _done{false};
+	};
+
+	using SinglePool = Singleton::Holder<Pool>;
+
+} //ns Ctoolhu::Thread
 
 #endif //file guard

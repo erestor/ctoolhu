@@ -6,43 +6,39 @@
 
 #include <chrono>
 
-namespace Ctoolhu {
+namespace Ctoolhu::Time {
 
-	namespace Time {
+	//tool for measuring elapsed time since instantiation or manual clock start
+	template <
+		class Resolution //how accurate should the timer be - use std::chrono::(hours|minutes|seconds|milliseconds) etc.
+	>
+	class Timer {
 
-		//tool for measuring elapsed time since instantiation or manual clock start
-		template <
-			class Resolution //how accurate should the timer be - use std::chrono::(hours|minutes|seconds|milliseconds) etc.
-		>
-		class Timer {
+		public:
 
-		  public:
+		using duration_t = Resolution;
+		using clock_t = std::chrono::steady_clock;
 
-			using duration_t = Resolution;
-			using clock_t = std::chrono::steady_clock;
+		Timer()
+		{
+			StartClock();
+		}
 
-			Timer()
-			{
-				StartClock();
-			}
+		void StartClock()
+		{
+			_startTime = clock_t::now();
+		}
 
-			void StartClock()
-			{
-				_startTime = clock_t::now();
-			}
+		duration_t ElapsedTime() const
+		{
+			return std::chrono::duration_cast<duration_t>(clock_t::now() - _startTime);
+		}
 
-			duration_t ElapsedTime() const
-			{
-				return std::chrono::duration_cast<duration_t>(clock_t::now() - _startTime);
-			}
+		private:
 
-		  private:
+		clock_t::time_point _startTime;
+	};
 
-			clock_t::time_point _startTime;
-		};
-
-	} //ns Time
-
-} //ns Ctoolhu
+} //ns Ctoolhu::Time
 
 #endif //file guard

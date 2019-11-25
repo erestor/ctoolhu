@@ -17,48 +17,44 @@
 
 #include <future>
 
-namespace Ctoolhu {
+namespace Ctoolhu::Thread {
 
-	namespace Thread {
+	//A wrapper around a std::future that adds the behavior of futures returned from std::async, to be used with the thread pool.
+	//Specifically, this object will block and wait for execution to finish before going out of scope.
+	template <typename T>
+	class Future {
 
-		//A wrapper around a std::future that adds the behavior of futures returned from std::async, to be used with the thread pool.
-		//Specifically, this object will block and wait for execution to finish before going out of scope.
-		template <typename T>
-		class Future {
+		public:
 
-		  public:
+		Future(std::future<T> &&future)
+			: _future{std::move(future)}
+		{
+		}
 
-			Future(std::future<T> &&future)
-				: _future{std::move(future)}
-			{
-			}
+		//prevent copying
+		Future(const Future &) = delete;
+		Future &operator=(const Future &) = delete;
 
-			//prevent copying
-			Future(const Future &) = delete;
-			Future &operator=(const Future &) = delete;
+		//allow moving
+		Future(Future &&) = default;
+		Future &operator=(Future &&) = default;
 
-			//allow moving
-			Future(Future &&) = default;
-			Future &operator=(Future &&) = default;
+		~Future()
+		{
+			if (_future.valid())
+				_future.get();
+		}
 
-			~Future()
-			{
-				if (_future.valid())
-					_future.get();
-			}
+		auto get()
+		{
+			return _future.get();
+		}
 
-			auto get()
-			{
-				return _future.get();
-			}
+		private:
 
-		  private:
+		std::future<T> _future;
+	};
 
-			std::future<T> _future;
-		};
-
-	} //ns Thread
-
-} //ns Ctoolhu
+} //ns Ctoolhu::Thread
 
 #endif //file guard

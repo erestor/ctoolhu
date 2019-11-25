@@ -21,131 +21,127 @@
 #include <queue>
 #include <utility>
 
-namespace Ctoolhu {
+namespace Ctoolhu::Thread {
 
-	namespace Thread {
+	/**
+		* The Queue class.
+		* Provides a wrapper around a basic queue to provide thread safety.
+		*/
+	template <typename T>
+	class Queue {
+
+		using lock_guard_t = std::lock_guard<std::mutex>;
+
+		public:
+
+		~Queue()
+		{
+			invalidate();
+		}
 
 		/**
-		 * The Queue class.
-		 * Provides a wrapper around a basic queue to provide thread safety.
-		 */
-		template <typename T>
-		class Queue {
+			* Attempt to get the first value in the queue.
+			* Returns true if a value was successfully written to the out parameter, false otherwise.
+			*/
+		bool tryPop(T &out)
+		{
+			lock_guard_t lock{_mutex};
+			if (_queue.empty() || !_valid)
+				return false;
 
-			using lock_guard_t = std::lock_guard<std::mutex>;
+			out = std::move(_queue.front());
+			_queue.pop();
+			return true;
+		}
 
-		  public:
+		/**
+			* Get the first value in the queue.
+			* Will block until a value is available unless clear is called or the instance is destructed.
+			* Returns true if a value was successfully written to the out parameter, false otherwise.
+			*/
+		bool waitPop(T &out)
+		{
+			std::unique_lock<std::mutex> lock{_mutex};
+			_changed.wait(lock, [this]() {
+				return !_queue.empty() || !_valid;
+			});
 
-			~Queue()
-			{
-				invalidate();
-			}
+			/*
+				* Using the condition in the predicate ensures that spurious wakeups with a valid
+				* but empty queue will not proceed, so only need to check for validity before proceeding.
+				*/
+			if (!_valid)
+				return false;
 
-			/**
-			 * Attempt to get the first value in the queue.
-			 * Returns true if a value was successfully written to the out parameter, false otherwise.
-			 */
-			bool tryPop(T &out)
-			{
-				lock_guard_t lock{_mutex};
-				if (_queue.empty() || !_valid)
-					return false;
+			out = std::move(_queue.front());
+			_queue.pop();
+			return true;
+		}
 
-				out = std::move(_queue.front());
-				_queue.pop();
-				return true;
-			}
-
-			/**
-			 * Get the first value in the queue.
-			 * Will block until a value is available unless clear is called or the instance is destructed.
-			 * Returns true if a value was successfully written to the out parameter, false otherwise.
-			 */
-			bool waitPop(T &out)
-			{
-				std::unique_lock<std::mutex> lock{_mutex};
-				_changed.wait(lock, [this]() {
-					return !_queue.empty() || !_valid;
-				});
-
-				/*
-				 * Using the condition in the predicate ensures that spurious wakeups with a valid
-				 * but empty queue will not proceed, so only need to check for validity before proceeding.
-				 */
-				if (!_valid)
-					return false;
-
-				out = std::move(_queue.front());
-				_queue.pop();
-				return true;
-			}
-
-			/**
-			 * Push a new value onto the queue.
-			 */
-			void push(T value)
-			{
-				{
-					lock_guard_t lock{_mutex};
-					_queue.push(std::move(value));
-				}
-				_changed.notify_one();
-			}
-
-			/**
-			 * Check whether or not the queue is empty.
-			 */
-			[[nodiscard]] bool empty() const
+		/**
+			* Push a new value onto the queue.
+			*/
+		void push(T value)
+		{
 			{
 				lock_guard_t lock{_mutex};
-				return _queue.empty();
+				_queue.push(std::move(value));
 			}
+			_changed.notify_one();
+		}
 
-			/**
-			 * Clear all items from the queue.
-			 */
-			void clear()
+		/**
+			* Check whether or not the queue is empty.
+			*/
+		[[nodiscard]] bool empty() const
+		{
+			lock_guard_t lock{_mutex};
+			return _queue.empty();
+		}
+
+		/**
+			* Clear all items from the queue.
+			*/
+		void clear()
+		{
 			{
-				{
-					lock_guard_t lock{_mutex};
-					while (!_queue.empty())
-						_queue.pop();
-				}
-				_changed.notify_all();
+				lock_guard_t lock{_mutex};
+				while (!_queue.empty())
+					_queue.pop();
 			}
+			_changed.notify_all();
+		}
 
-			/**
-			 * Invalidate the queue.
-			 * Used to ensure no conditions are being waited on in waitPop when
-			 * a thread or the application is trying to exit.
-			 * The queue is invalid after calling this method and it is an error
-			 * to continue using a queue after this method has been called.
-			 */
-			void invalidate()
-			{
-				_valid = false;
-				_changed.notify_all();
-			}
+		/**
+			* Invalidate the queue.
+			* Used to ensure no conditions are being waited on in waitPop when
+			* a thread or the application is trying to exit.
+			* The queue is invalid after calling this method and it is an error
+			* to continue using a queue after this method has been called.
+			*/
+		void invalidate()
+		{
+			_valid = false;
+			_changed.notify_all();
+		}
 
-			/**
-			 * Returns whether or not this queue is valid.
-			 */
-			[[nodiscard]] bool isValid() const noexcept
-			{
-				return _valid;
-			}
+		/**
+			* Returns whether or not this queue is valid.
+			*/
+		[[nodiscard]] bool isValid() const noexcept
+		{
+			return _valid;
+		}
 
-		  private:
+		private:
 
-			std::queue<T> _queue;
-			std::atomic_bool _valid{true};
+		std::queue<T> _queue;
+		std::atomic_bool _valid{true};
 
-			mutable std::mutex _mutex;
-			std::condition_variable _changed;
-		};
+		mutable std::mutex _mutex;
+		std::condition_variable _changed;
+	};
 
-	} //ns Thread
-
-} //ns Ctoolhu
+} //ns Ctoolhu::Thread
 
 #endif //file guard

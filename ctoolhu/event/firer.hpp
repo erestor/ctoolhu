@@ -8,34 +8,30 @@
 #include "../singleton/holder.hpp"
 #include <type_traits>
 
-namespace Ctoolhu {
+namespace Ctoolhu::Event {
 
-	namespace Event {
+	//for firing events without parameters ('singleton events')
+	template <class Event>
+	void Fire()
+	{
+		static_assert(std::is_empty<Event>::value, "can't fire events with parameters by type only");
+		Private::SingleAggregator<Event>::Instance().Fire(Singleton::Holder<Event>::Instance());
+	}
 
-		//for firing events without parameters ('singleton events')
-		template <class Event>
-		void Fire()
-		{
-			static_assert(std::is_empty<Event>::value, "can't fire events with parameters by type only");
-			Private::SingleAggregator<Event>::Instance().Fire(Singleton::Holder<Event>::Instance());
-		}
+	//for firing const events with data
+	template <class Event>
+	void Fire(const Event &e)
+	{
+		Private::SingleAggregator<Event>::Instance().Fire(e);
+	}
 
-		//for firing const events with data
-		template <class Event>
-		void Fire(const Event &e)
-		{
-			Private::SingleAggregator<Event>::Instance().Fire(e);
-		}
+	//for firing events with data expecting some data back
+	template <class Event>
+	void Fire(Event &e)
+	{
+		Private::SingleAggregator<Event>::Instance().Fire(e);
+	}
 
-		//for firing events with data expecting some data back
-		template <class Event>
-		void Fire(Event &e)
-		{
-			Private::SingleAggregator<Event>::Instance().Fire(e);
-		}
-
-	} //ns Event
-
-} //ns Ctoolhu
+} //ns Ctoolhu::Event
 
 #endif
