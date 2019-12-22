@@ -78,5 +78,8 @@
     <ClInclude Include="ctoolhu\thread\async.hpp">
       <Filter>ctoolhu\thread</Filter>
     </ClInclude>
+    <ClInclude Include="ctoolhu\random\selector.hpp">
+      <Filter>ctoolhu\random</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
