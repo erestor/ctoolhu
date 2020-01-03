@@ -71,7 +71,7 @@ namespace Ctoolhu::Event {
 		//subscribes a given custom handler which is a member method of the child class
 		connection_t Subscribe(handler_type handler)
 		{
-			return _store(Private::SingleAggregator<Event>::Instance().Subscribe([this](Event *e) {
+			return _store(Private::SingleAggregator<Event>::Instance().Subscribe([=](Event *e) {
 				(static_cast<HandlerHolder *>(this)->*handler)(e);
 			}));
 		}
