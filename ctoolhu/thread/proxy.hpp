@@ -12,7 +12,7 @@ namespace Ctoolhu::Thread {
 	template <class T>
 	class LockingProxy {
 
-		public:
+	  public:
 
 		explicit LockingProxy(T *client) : _client(client)
 		{
@@ -39,7 +39,7 @@ namespace Ctoolhu::Thread {
 		LockingProxy(const LockingProxy &) = delete;
 		LockingProxy &operator =(const LockingProxy &) = delete;
 
-		private:
+	  private:
 
 		T *_client;
 	};

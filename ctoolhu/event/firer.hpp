@@ -14,7 +14,7 @@ namespace Ctoolhu::Event {
 	template <class Event>
 	void Fire()
 	{
-		static_assert(std::is_empty<Event>::value, "can't fire events with parameters by type only");
+		static_assert(std::is_empty_v<Event>, "can't fire events with parameters by type only");
 		Private::SingleAggregator<Event>::Instance().Fire(Singleton::Holder<Event>::Instance());
 	}
 

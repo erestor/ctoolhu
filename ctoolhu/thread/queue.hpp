@@ -32,7 +32,7 @@ namespace Ctoolhu::Thread {
 
 		using lock_guard_t = std::lock_guard<std::mutex>;
 
-		public:
+	  public:
 
 		~Queue()
 		{
@@ -40,9 +40,9 @@ namespace Ctoolhu::Thread {
 		}
 
 		/**
-			* Attempt to get the first value in the queue.
-			* Returns true if a value was successfully written to the out parameter, false otherwise.
-			*/
+		* Attempt to get the first value in the queue.
+		* Returns true if a value was successfully written to the out parameter, false otherwise.
+		*/
 		bool tryPop(T &out)
 		{
 			lock_guard_t lock{_mutex};
@@ -55,10 +55,10 @@ namespace Ctoolhu::Thread {
 		}
 
 		/**
-			* Get the first value in the queue.
-			* Will block until a value is available unless clear is called or the instance is destructed.
-			* Returns true if a value was successfully written to the out parameter, false otherwise.
-			*/
+		* Get the first value in the queue.
+		* Will block until a value is available unless clear is called or the instance is destructed.
+		* Returns true if a value was successfully written to the out parameter, false otherwise.
+		*/
 		bool waitPop(T &out)
 		{
 			std::unique_lock<std::mutex> lock{_mutex};
@@ -78,9 +78,7 @@ namespace Ctoolhu::Thread {
 			return true;
 		}
 
-		/**
-			* Push a new value onto the queue.
-			*/
+		//push a new value onto the queue
 		void push(T value)
 		{
 			{
@@ -90,18 +88,14 @@ namespace Ctoolhu::Thread {
 			_changed.notify_one();
 		}
 
-		/**
-			* Check whether or not the queue is empty.
-			*/
+		//check whether or not the queue is empty
 		[[nodiscard]] bool empty() const
 		{
 			lock_guard_t lock{_mutex};
 			return _queue.empty();
 		}
 
-		/**
-			* Clear all items from the queue.
-			*/
+		//clear all items from the queue
 		void clear()
 		{
 			{
@@ -113,27 +107,25 @@ namespace Ctoolhu::Thread {
 		}
 
 		/**
-			* Invalidate the queue.
-			* Used to ensure no conditions are being waited on in waitPop when
-			* a thread or the application is trying to exit.
-			* The queue is invalid after calling this method and it is an error
-			* to continue using a queue after this method has been called.
-			*/
+		* Invalidate the queue.
+		* Used to ensure no conditions are being waited on in waitPop when
+		* a thread or the application is trying to exit.
+		* The queue is invalid after calling this method and it is an error
+		* to continue using a queue after this method has been called.
+		*/
 		void invalidate()
 		{
 			_valid = false;
 			_changed.notify_all();
 		}
 
-		/**
-			* Returns whether or not this queue is valid.
-			*/
+		//returns whether or not this queue is valid
 		[[nodiscard]] bool isValid() const noexcept
 		{
 			return _valid;
 		}
 
-		private:
+	  private:
 
 		std::queue<T> _queue;
 		std::atomic_bool _valid{true};

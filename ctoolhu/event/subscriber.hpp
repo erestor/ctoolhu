@@ -12,13 +12,14 @@ namespace Ctoolhu::Event {
 	//provides effortless subscription of event handlers for events given as template parameters to the event aggregator -
 	//- inheriting from this class will subscribe default event handlers automatically upon object construction
 	//- compile-time error will occurr if the handler isn't implemented
-	template <class... EventTypes> class Subscriber {
+	template <class... EventTypes>
+	class Subscriber {
 
-		public:
+	  public:
 
 		virtual ~Subscriber() = default;
 
-		protected:
+	  protected:
 
 		virtual void on() {}
 	};
@@ -28,7 +29,7 @@ namespace Ctoolhu::Event {
 
 		using base_t = Subscriber<EventTypes...>;
 
-		protected:
+	  protected:
 
 		//automatically subscribes method 'on(Event *)' as a handler
 		Subscriber()
@@ -50,7 +51,7 @@ namespace Ctoolhu::Event {
 		using base_t::on;
 		virtual void on(Event *) = 0;	//override this in the child class
 
-		private:
+	  private:
 
 		connection_t _connection;
 	};
@@ -63,14 +64,14 @@ namespace Ctoolhu::Event {
 	>
 	class ManualSubscriber {
 
-		public:
+	  public:
 
 		using handler_type = void (HandlerHolder::*)(Event *);
 
 		//subscribes a given custom handler which is a member method of the child class
 		connection_t Subscribe(handler_type handler)
 		{
-			return Store(Private::SingleAggregator<Event>::Instance().Subscribe([=](Event *e) {
+			return _store(Private::SingleAggregator<Event>::Instance().Subscribe([this](Event *e) {
 				(static_cast<HandlerHolder *>(this)->*handler)(e);
 			}));
 		}
@@ -79,7 +80,7 @@ namespace Ctoolhu::Event {
 		template <typename OtherHandler>
 		connection_t Subscribe(const OtherHandler &handler)
 		{
-			return Store(Private::SingleAggregator<Event>::Instance().Subscribe([handler](Event *e) {
+			return _store(Private::SingleAggregator<Event>::Instance().Subscribe([&handler](Event *e) {
 				handler(e);
 			}));
 		}
@@ -96,9 +97,10 @@ namespace Ctoolhu::Event {
 			}
 		}
 
-		protected:
+	  protected:
 
 		ManualSubscriber() = default;
+
 		explicit ManualSubscriber(handler_type handler)
 		{
 			Subscribe(handler);
@@ -115,9 +117,9 @@ namespace Ctoolhu::Event {
 		ManualSubscriber(const ManualSubscriber &) = delete;
 		ManualSubscriber &operator =(const ManualSubscriber &) = delete;
 
-		private:
+	  private:
 
-		connection_t Store(const connection_t &conn)
+		connection_t _store(const connection_t &conn)
 		{
 			_connections.push_back(conn);
 			return conn;

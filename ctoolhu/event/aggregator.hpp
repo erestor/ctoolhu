@@ -18,7 +18,7 @@ namespace Ctoolhu::Event {
 		template <class Event>
 		class Aggregator {
 
-			public:
+		  public:
 
 			Aggregator(const Aggregator &) = delete;
 			Aggregator &operator =(const Aggregator &) = delete;
@@ -41,7 +41,7 @@ namespace Ctoolhu::Event {
 				_signal(&e);
 			}
 
-			private:
+		  private:
 
 			friend struct Loki::CreateUsingNew<Aggregator>;
 			Aggregator() = default;

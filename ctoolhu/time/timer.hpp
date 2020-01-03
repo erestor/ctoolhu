@@ -14,7 +14,7 @@ namespace Ctoolhu::Time {
 	>
 	class Timer {
 
-		public:
+	  public:
 
 		using duration_t = Resolution;
 		using clock_t = std::chrono::steady_clock;
@@ -34,7 +34,7 @@ namespace Ctoolhu::Time {
 			return std::chrono::duration_cast<duration_t>(clock_t::now() - _startTime);
 		}
 
-		private:
+	  private:
 
 		clock_t::time_point _startTime;
 	};

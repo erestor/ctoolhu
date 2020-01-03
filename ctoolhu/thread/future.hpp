@@ -24,7 +24,7 @@ namespace Ctoolhu::Thread {
 	template <typename T>
 	class Future {
 
-		public:
+	  public:
 
 		Future(std::future<T> &&future)
 			: _future{std::move(future)}
@@ -50,7 +50,7 @@ namespace Ctoolhu::Thread {
 			return _future.get();
 		}
 
-		private:
+	  private:
 
 		std::future<T> _future;
 	};

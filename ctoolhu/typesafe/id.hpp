@@ -12,7 +12,7 @@ namespace Ctoolhu::TypeSafe {
 	template <typename IdType>
 	class Storage {
 			
-		public:
+	  public:
 
 		bool operator ==(Storage comp) const noexcept
 		{
@@ -49,7 +49,7 @@ namespace Ctoolhu::TypeSafe {
 			return out << storage._id;
 		}
 
-		protected:
+	  protected:
 
 		Storage() noexcept = default;
 
@@ -60,14 +60,14 @@ namespace Ctoolhu::TypeSafe {
 	template <typename IdType>
 	class ImplicitConversion : public Storage<IdType> {
 
-		public:
+	  public:
 
 		operator IdType() const noexcept
 		{
 			return this->_id;
 		}
 
-		protected:
+	  protected:
 
 		ImplicitConversion() noexcept = default;
 	};
@@ -76,14 +76,14 @@ namespace Ctoolhu::TypeSafe {
 	template <typename IdType>
 	class ExplicitConversion : public Storage<IdType> {
 
-		public:
+	  public:
 
 		explicit operator IdType() const noexcept
 		{
 			return this->_id;
 		}
 
-		protected:
+	  protected:
 
 		ExplicitConversion() noexcept = default;
 	};
@@ -107,7 +107,7 @@ namespace Ctoolhu::TypeSafe {
 	>
 	class Id : public ConversionPolicy<IdType> {
 
-		public:
+	  public:
 
 		using object_t = RequestingObject;
 		using id_t = IdType;
@@ -136,7 +136,7 @@ namespace Ctoolhu::TypeSafe {
 			return *this;
 		}
 
-		private:
+	  private:
 
 		id_t _val; //so that we can see the value readily in watch window of the debugger
 #endif

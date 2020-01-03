@@ -34,7 +34,7 @@ namespace Ctoolhu::Thread {
 
 		class IThreadTask {
 
-			public:
+		  public:
 
 			IThreadTask() = default;
 			virtual ~IThreadTask() = default;
@@ -45,16 +45,14 @@ namespace Ctoolhu::Thread {
 			IThreadTask(IThreadTask &&) = default;
 			IThreadTask &operator=(IThreadTask &&) = default;
 
-			/**
-				* Run the task.
-				*/
+			//run the task
 			virtual void execute() = 0;
 		};
 
 		template <typename Func>
 		class ThreadTask : public IThreadTask {
 
-			public:
+		  public:
 
 			ThreadTask(Func &&func)
 				: _func{std::move(func)}
@@ -77,20 +75,17 @@ namespace Ctoolhu::Thread {
 				_func();
 			}
 
-			private:
+		  private:
 
 			Func _func;
 		};
 
 	} //ns Private
 
-	/**
-		* The Pool class.
-		* Keeps a set of threads constantly waiting to execute incoming jobs.
-		*/
+	//keeps a set of threads constantly waiting to execute incoming jobs
 	class Pool {
 
-		public:
+	  public:
 
 		explicit Pool(unsigned int numThreads)
 		{
@@ -115,9 +110,7 @@ namespace Ctoolhu::Thread {
 		Pool(const Pool &) = delete;
 		Pool &operator=(const Pool &) = delete;
 
-		/**
-			* Submit a job to be run by the thread pool.
-			*/
+		//submit a job to be run by the thread pool
 		template <typename Func, typename... Args>
 		auto submit(Func &&func, Args &&... args)
 		{
@@ -132,11 +125,9 @@ namespace Ctoolhu::Thread {
 			return result;
 		}
 
-		private:
+	  private:
 
-		/**
-			* Constantly running function each thread uses to acquire work items from the queue.
-			*/
+		//constantly running function each thread uses to acquire work items from the queue
 		void worker()
 		{
 			while (!_done) {
@@ -146,9 +137,7 @@ namespace Ctoolhu::Thread {
 			}
 		}
 
-		/**
-			* Invalidates the queue and joins all running threads.
-			*/
+		//invalidates the queue and joins all running threads
 		void destroy()
 		{
 			_done = true;

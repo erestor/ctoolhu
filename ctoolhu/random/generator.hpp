@@ -29,7 +29,7 @@ namespace Ctoolhu::Random {
 	
 		using base_t = RandomGenerator<Distribution>;
 
-		public:
+	  public:
 
 		//for number generators
 		Generator(Boundary lower, Boundary upper)
@@ -57,7 +57,7 @@ namespace Ctoolhu::Random {
 	>
 	class StaticGenerator : public RandomGenerator<Distribution> {
 
-		public:
+	  public:
 
 		StaticGenerator()
 			: RandomGenerator<Distribution>(Private::SingleRandomEngine::Instance(), Distribution(LowerBound, UpperBound)) {}

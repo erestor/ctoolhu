@@ -10,7 +10,7 @@ namespace Ctoolhu::Thread {
 	template <class Mutex>
 	class Lockable {
 
-		public:
+	  public:
 
 		void Lock()
 		{
@@ -22,11 +22,11 @@ namespace Ctoolhu::Thread {
 			_mutex.unlock();
 		}
 
-		protected:
+	  protected:
 
 		Lockable() = default;
 
-		private:
+	  private:
 
 		Mutex _mutex;
 	};
