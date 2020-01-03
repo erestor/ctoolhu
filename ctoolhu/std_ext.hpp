@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <numeric>
+#include <type_traits>
 
 //this is a std extension by purpose, so will stay outside the Ctoolhu namespace
 
@@ -38,10 +39,10 @@ namespace std_ext {
 	}
 
 	template <class Destination, class Source>
-	auto concat(Destination &d, Source &s)
+	auto concat(Destination &d, const Source &s)
 	{
 		d.reserve(d.size() + s.size());
-		return std::copy(std::begin(s), std::end(s), std::back_inserter(d));
+		return std::copy(std::cbegin(s), std::cend(s), std::back_inserter(d));
 	}
 
 	template <class Destination, class Source>
@@ -54,7 +55,7 @@ namespace std_ext {
 	template <class LookupContainer>
 	bool contains(const LookupContainer &c, const typename LookupContainer::value_type &v)
 	{
-		return find(c, v) != std::end(c);
+		return find(c, v) != std::cend(c);
 	}
 
 	template <class LookupContainer>
@@ -63,6 +64,18 @@ namespace std_ext {
 		return any_of(n, [&c](auto const &v) {
 			return contains(c, v);
 		});
+	}
+
+	template <class SourceContainer, class OutputIterator>
+	auto copy(const SourceContainer &src, OutputIterator &&dst)
+	{
+		return std::copy(std::cbegin(src), std::cend(src), std::forward<OutputIterator>(dst));
+	}
+
+	template <class SourceContainer, class OutputIterator, class Predicate>
+	auto copy_if(const SourceContainer &src, OutputIterator &&dst, const Predicate &p)
+	{
+		return std::copy_if(std::cbegin(src), std::cend(src), std::forward<OutputIterator>(dst), p);
 	}
 
 	template <class Container, class Predicate>
