@@ -38,6 +38,20 @@ namespace std_ext {
 		return std::any_of(std::cbegin(c), std::cend(c), p);
 	}
 
+	template <class LookupContainer, class T, class Compare = std::less<>>
+	auto binary_find(const LookupContainer &c, const T &val, Compare comp = {})
+	{
+		auto last = std::cend(c);
+		auto first = std::lower_bound(std::cbegin(c), last, val, comp);
+		return first != last && !comp(val, *first) ? first : last;
+	}
+
+	template <class LookupContainer, class T>
+	bool binary_search(const LookupContainer &c, const T &v)
+	{
+		return std::binary_search(std::cbegin(c), std::cend(c), v);
+	}
+
 	template <class Destination, class Source>
 	auto concat(Destination &d, const Source &s)
 	{
