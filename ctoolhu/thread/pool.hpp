@@ -114,13 +114,13 @@ namespace Ctoolhu::Thread {
 		template <typename Func, typename... Args>
 		auto submit(Func &&func, Args &&... args)
 		{
-			auto boundTask = std::bind(std::forward<Func>(func), std::forward<Args>(args)...); //TODO - use lambda instead?
+			auto boundTask = std::bind(std::forward<Func>(func), std::forward<Args>(args)...); //using a lambda instead would lose the perfect forwarding
 			using job_result_t = std::invoke_result_t<decltype(boundTask)>;
 			using packaged_task_t = std::packaged_task<job_result_t()>;
 			using task_t = Private::ThreadTask<packaged_task_t>;
 
 			packaged_task_t task{std::move(boundTask)};
-			Future<job_result_t> result{task.get_future()};
+			auto result = task.get_future();
 			_workQueue.push(std::make_unique<task_t>(std::move(task)));
 			return result;
 		}
