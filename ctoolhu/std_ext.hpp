@@ -159,6 +159,12 @@ namespace std_ext {
 		std::sort(std::begin(c), std::end(c), comp);
 	}
 
+	template <class Container, class OutputIterator, typename Reductor>
+	void transform(const Container &src, OutputIterator &&dst, const Reductor &r)
+	{
+		std::transform(std::cbegin(src), std::cend(src), std::forward<OutputIterator>(dst), r);
+	}
+
 	template <class Container>
 	auto unique(Container &c)
 	{
