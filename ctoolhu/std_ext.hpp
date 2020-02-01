@@ -142,6 +142,15 @@ namespace std_ext {
 	}
 
 	template <class Container>
+	bool next_k_permutation(Container &c, int choose)
+	{
+		auto first = std::begin(c);
+		auto last = std::end(c);
+		std::reverse(first + choose, last);
+		return std::next_permutation(first, last);
+	}
+
+	template <class Container>
 	bool next_combination(Container &c, int choose)
 	{
 		bool result;
@@ -150,15 +159,6 @@ namespace std_ext {
 			result = next_k_permutation(c, choose);
 		} while (std::adjacent_find(first, first + choose, std::greater{}) != first + choose);
 		return result;
-	}
-
-	template <class Container>
-	bool next_k_permutation(Container &c, int choose)
-	{
-		auto first = std::begin(c);
-		auto last = std::end(c);
-		std::reverse(first + choose, last);
-		return std::next_permutation(first, last);
 	}
 
 	template <class Container, class Predicate>
