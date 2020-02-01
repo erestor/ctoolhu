@@ -141,6 +141,26 @@ namespace std_ext {
 		return std::min_element(std::cbegin(c), std::cend(c));
 	}
 
+	template <class Container>
+	bool next_combination(Container &c, int choose)
+	{
+		bool result;
+		auto first = std::begin(c);
+		do {
+			result = next_k_permutation(c, choose);
+		} while (std::adjacent_find(first, first + choose, std::greater{}) != first + choose);
+		return result;
+	}
+
+	template <class Container>
+	bool next_k_permutation(Container &c, int choose)
+	{
+		auto first = std::begin(c);
+		auto last = std::end(c);
+		std::reverse(first + choose, last);
+		return std::next_permutation(first, last);
+	}
+
 	template <class Container, class Predicate>
 	typename Container::iterator remove_if(Container &c, const Predicate &p)
 	{
