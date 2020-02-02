@@ -5,6 +5,7 @@
 #define _ctoolhu_std_ext_included_
 
 #include <algorithm>
+#include <cassert>
 #include <numeric>
 #include <type_traits>
 
@@ -20,10 +21,10 @@ namespace std_ext {
 		return std::accumulate(std::cbegin(c), std::cend(c), init);
 	}
 
-	template <class Container, typename Reductor, typename Sum>
-	Sum accumulate(const Container &c, Sum init, const Reductor &r)
+	template <class Container, typename Sum, class Reductor>
+	Sum accumulate(const Container &c, Sum init, Reductor &&r)
 	{
-		return std::accumulate(std::cbegin(c), std::cend(c), init, r);
+		return std::accumulate(std::cbegin(c), std::cend(c), init, std::forward<Reductor>(r));
 	}
 
 	template <class Container, class Predicate>
@@ -174,27 +175,28 @@ namespace std_ext {
 	}
 
 	template <class Container, class Comparator>
-	void sort(Container &c, Comparator comp)
+	void sort(Container &c, Comparator &&comp)
 	{
-		std::sort(std::begin(c), std::end(c), comp);
+		std::sort(std::begin(c), std::end(c), std::forward<Comparator>(comp));
 	}
 
-	template <class Container, class OutputIterator, typename Reductor>
-	void transform(const Container &src, OutputIterator &&dst, const Reductor &r)
+	template <class Container, class OutputIterator, class Reductor>
+	void transform(const Container &src, OutputIterator &&dst, Reductor &&r)
 	{
-		std::transform(std::cbegin(src), std::cend(src), std::forward<OutputIterator>(dst), r);
+		std::transform(std::cbegin(src), std::cend(src), std::forward<OutputIterator>(dst), std::forward<Reductor>(r));
 	}
 
 	template <class Container>
 	auto unique(Container &c)
 	{
+		assert(std::is_sorted(std::cbegin(c), std::cend(c)) && "Container should be sorted for erase_duplicates");
 		return std::unique(std::begin(c), std::end(c));
 	}
 
 	template <class Container, class Comparator>
-	auto unique(Container &c, Comparator comp)
+	auto unique(Container &c, Comparator &&comp)
 	{
-		return std::unique(std::begin(c), std::end(c), comp);
+		return std::unique(std::begin(c), std::end(c), std::forward<Comparator>(comp));
 	}
 
 	//removes duplicate values from given sorted container
@@ -206,9 +208,9 @@ namespace std_ext {
 
 	//removes duplicate values from given sorted container
 	template <class Container, class Comparator>
-	void erase_duplicates(Container &c, Comparator comp)
+	void erase_duplicates(Container &c, Comparator &&comp)
 	{
-		c.erase(unique(c, comp), std::end(c));
+		c.erase(unique(c, std::forward<Comparator>(comp)), std::end(c));
 	}
 }
 
