@@ -25,6 +25,9 @@
     <Filter Include="ctoolhu\singleton">
       <UniqueIdentifier>{f3f815f1-f437-467b-89ce-2d5d474c906c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ctoolhu\property_tree">
+      <UniqueIdentifier>{fdb5ba19-bfce-48e3-9e68-5d21b340d3af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ctoolhu\event\aggregator.hpp">
@@ -80,6 +83,9 @@
     </ClInclude>
     <ClInclude Include="ctoolhu\random\selector.hpp">
       <Filter>ctoolhu\random</Filter>
+    </ClInclude>
+    <ClInclude Include="ctoolhu\property_tree\ptree_ext.hpp">
+      <Filter>ctoolhu\property_tree</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
