@@ -28,6 +28,9 @@
     <Filter Include="ctoolhu\property_tree">
       <UniqueIdentifier>{fdb5ba19-bfce-48e3-9e68-5d21b340d3af}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ctoolhu\visitor">
+      <UniqueIdentifier>{0cbf6dc5-eb9f-406e-8b03-bf3a54a1686a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ctoolhu\event\aggregator.hpp">
@@ -86,6 +89,12 @@
     </ClInclude>
     <ClInclude Include="ctoolhu\property_tree\ptree_ext.hpp">
       <Filter>ctoolhu\property_tree</Filter>
+    </ClInclude>
+    <ClInclude Include="ctoolhu\visitor\visitor.hpp">
+      <Filter>ctoolhu\visitor</Filter>
+    </ClInclude>
+    <ClInclude Include="ctoolhu\visitor\visitable.hpp">
+      <Filter>ctoolhu\visitor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

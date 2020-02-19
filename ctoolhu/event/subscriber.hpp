@@ -21,7 +21,7 @@ namespace Ctoolhu::Event {
 
 	  protected:
 
-		virtual void on() {}
+		void on(); //syntactic sugar to allow the using clause in the recursion
 	};
 
 	template <class Event, class... EventTypes> //events we're subscribing for

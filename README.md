@@ -34,6 +34,8 @@ What does it give you?
   - stopwatch for duration measurement
 - typesafe
   - type-safe integers
+- visitor
+  - boilerplate for implementing the visitor pattern
 
 What next?
 

@@ -90,6 +90,8 @@
     <ClInclude Include="ctoolhu\thread\queue.hpp" />
     <ClInclude Include="ctoolhu\time\timer.hpp" />
     <ClInclude Include="ctoolhu\typesafe\id.hpp" />
+    <ClInclude Include="ctoolhu\visitor\visitor.hpp" />
+    <ClInclude Include="ctoolhu\visitor\visitable.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
