@@ -59,8 +59,6 @@ namespace Ctoolhu::Thread {
 			{
 			}
 
-			~ThreadTask() override = default;
-
 			ThreadTask(const ThreadTask &) = delete;
 			ThreadTask &operator=(const ThreadTask &) = delete;
 
