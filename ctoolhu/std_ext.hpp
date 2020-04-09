@@ -93,8 +93,14 @@ namespace std_ext {
 		return std::copy_if(std::cbegin(src), std::cend(src), std::forward<OutputIterator>(dst), p);
 	}
 
+	template <class Container, class Value>
+	auto count(const Container &c, Value v)
+	{
+		return std::count(std::cbegin(c), std::cend(c), v);
+	}
+
 	template <class Container, class Predicate>
-	auto count_if(Container &c, const Predicate &p)
+	auto count_if(const Container &c, const Predicate &p)
 	{
 		return std::count_if(std::cbegin(c), std::cend(c), p);
 	}
