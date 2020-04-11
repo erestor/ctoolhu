@@ -114,7 +114,7 @@ namespace Ctoolhu::TypeSafe {
 
 		explicit Id(id_t id) noexcept
 #ifdef _DEBUG
-			: _val{id}
+			: _val{this->_id}
 #endif
 		{
 			this->_id = id;
@@ -125,20 +125,20 @@ namespace Ctoolhu::TypeSafe {
 		Id &operator =(const Id &) noexcept = default;
 #else
 		Id(const Id &src) noexcept
+			: _val{this->_id}
 		{
 			*this = src;
 		}
 
 		Id &operator =(const Id &src) noexcept
 		{
-			_val = src._id;
 			this->_id = src._id;
 			return *this;
 		}
 
 	  private:
 
-		id_t _val; //so that we can see the value readily in watch window of the debugger
+		id_t &_val; //so that we can see the value readily in watch window of the debugger
 #endif
 	};
 
