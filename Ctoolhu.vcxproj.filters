@@ -97,4 +97,7 @@
       <Filter>ctoolhu\visitor</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="Ctoolhu.natvis" />
+  </ItemGroup>
 </Project>

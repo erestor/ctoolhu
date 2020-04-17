@@ -5,6 +5,7 @@
 #define _ctoolhu_typesafe_id_included_
 
 #include <iosfwd>
+#include <type_traits>
 
 namespace Ctoolhu::TypeSafe {
 
@@ -112,35 +113,19 @@ namespace Ctoolhu::TypeSafe {
 		using object_t = RequestingObject;
 		using id_t = IdType;
 
-		explicit Id(id_t id) noexcept
-#ifdef _DEBUG
-			: _val{this->_id}
-#endif
+		Id() = default;
+
+		explicit constexpr Id(id_t id) noexcept
 		{
 			this->_id = id;
 		}
 
-#ifndef _DEBUG
 		Id(const Id &src) noexcept = default;
 		Id &operator =(const Id &) noexcept = default;
-#else
-		Id(const Id &src) noexcept
-			: _val{this->_id}
-		{
-			*this = src;
-		}
-
-		Id &operator =(const Id &src) noexcept
-		{
-			this->_id = src._id;
-			return *this;
-		}
-
-	  private:
-
-		id_t &_val; //so that we can see the value readily in watch window of the debugger
-#endif
 	};
+
+	static_assert(std::is_trivial_v<Id<int, int>>);
+	static_assert(std::is_trivial_v<Id<int, int, ExplicitConversion>>);
 
 } //ns Ctoolhu::TypeSafe
 

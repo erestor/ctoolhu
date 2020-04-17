@@ -93,6 +93,9 @@
     <ClInclude Include="ctoolhu\visitor\visitor.hpp" />
     <ClInclude Include="ctoolhu\visitor\visitable.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="Ctoolhu.natvis" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
