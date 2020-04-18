@@ -9,84 +9,88 @@
 
 namespace Ctoolhu::TypeSafe {
 
-	//stores a value (id) and exposes some typical operations usually performed on ids
-	template <typename IdType>
-	class Storage {
+	namespace Private {
+
+		//stores a value (id) and exposes some typical operations usually performed on ids
+		template <typename IdType>
+		class Storage {
 			
-	  public:
+		  public:
 
-		bool operator ==(Storage comp) const noexcept
-		{
-			return _id == comp._id;
-		}
+			constexpr bool operator ==(Storage comp) const noexcept
+			{
+				return _id == comp._id;
+			}
 
-		bool operator !=(Storage comp) const noexcept
-		{
-			return _id != comp._id;
-		}
+			constexpr bool operator !=(Storage comp) const noexcept
+			{
+				return _id != comp._id;
+			}
 
-		bool operator <(Storage comp) const noexcept
-		{
-			return _id < comp._id;
-		}
+			constexpr bool operator <(Storage comp) const noexcept
+			{
+				return _id < comp._id;
+			}
 
-		bool operator >(Storage comp) const noexcept
-		{
-			return _id > comp._id;
-		}
+			constexpr bool operator >(Storage comp) const noexcept
+			{
+				return _id > comp._id;
+			}
 
-		bool operator <=(Storage comp) const noexcept
-		{
-			return _id <= comp._id;
-		}
+			constexpr bool operator <=(Storage comp) const noexcept
+			{
+				return _id <= comp._id;
+			}
 
-		bool operator >=(Storage comp) const noexcept
-		{
-			return _id >= comp._id;
-		}
+			constexpr bool operator >=(Storage comp) const noexcept
+			{
+				return _id >= comp._id;
+			}
 
-		friend std::ostream &operator <<(std::ostream &out, Storage storage)
-		{
-			return out << storage._id;
-		}
+			friend std::ostream &operator <<(std::ostream &out, Storage storage)
+			{
+				return out << storage._id;
+			}
 
-	  protected:
+		  protected:
 
-		Storage() noexcept = default;
+			constexpr Storage() noexcept = default;
 
-		IdType _id;
-	};
+			IdType _id;
+		};
+
+	} //ns Private
 
 	//policy defining that the conversion to stored id type is implicit
 	template <typename IdType>
-	class ImplicitConversion : public Storage<IdType> {
+	class ImplicitConversion : public Private::Storage<IdType> {
 
 	  public:
 
-		operator IdType() const noexcept
+		constexpr operator IdType() const noexcept
 		{
 			return this->_id;
 		}
 
 	  protected:
 
-		ImplicitConversion() noexcept = default;
+		constexpr ImplicitConversion() noexcept = default;
 	};
 
-	//policy defining that the conversion to stored id type is explicit so that it cannot be mistakenly juxtaposed for the underlying type
+	//policy defining that the conversion to stored id type is explicit so that it cannot be mistakenly juxtaposed with the underlying type
 	template <typename IdType>
-	class ExplicitConversion : public Storage<IdType> {
+	class ExplicitConversion : public Private::Storage<IdType> {
 
 	  public:
 
-		explicit operator IdType() const noexcept
+		constexpr explicit operator IdType() const noexcept
 		{
 			return this->_id;
 		}
 
 	  protected:
 
-		ExplicitConversion() noexcept = default;
+		constexpr ExplicitConversion() noexcept = default;
 	};
 
 	//Tool for preventing mix-up of ids of different objects by means of
@@ -113,18 +117,15 @@ namespace Ctoolhu::TypeSafe {
 		using object_t = RequestingObject;
 		using id_t = IdType;
 
-		Id() = default;
+		constexpr Id() = default;
 
 		explicit constexpr Id(id_t id) noexcept
 		{
 			this->_id = id;
 		}
-
-		Id(const Id &src) noexcept = default;
-		Id &operator =(const Id &) noexcept = default;
 	};
 
-	static_assert(std::is_trivial_v<Id<int, int>>);
+	static_assert(std::is_trivial_v<Id<int, int, ImplicitConversion>>);
 	static_assert(std::is_trivial_v<Id<int, int, ExplicitConversion>>);
 
 } //ns Ctoolhu::TypeSafe
