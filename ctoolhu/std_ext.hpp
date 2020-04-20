@@ -13,8 +13,6 @@
 
 namespace std_ext {
 
-    template <class Container> typename Container::const_iterator find(const Container &c, const typename Container::value_type &v);
-
 	template <class Container, typename Sum>
 	Sum accumulate(const Container &c, Sum init)
 	{
@@ -39,46 +37,10 @@ namespace std_ext {
 		return std::any_of(std::cbegin(c), std::cend(c), p);
 	}
 
-	template <class LookupContainer, class T, class Compare = std::less<>>
-	auto binary_find(const LookupContainer &c, const T &val, Compare comp = {})
-	{
-		auto last = std::cend(c);
-		auto first = std::lower_bound(std::cbegin(c), last, val, comp);
-		return first != last && !comp(val, *first) ? first : last;
-	}
-
 	template <class LookupContainer, class T>
 	bool binary_search(const LookupContainer &c, const T &v)
 	{
 		return std::binary_search(std::cbegin(c), std::cend(c), v);
-	}
-
-	template <class Destination, class Source>
-	auto concat(Destination &d, const Source &s)
-	{
-		d.reserve(d.size() + s.size());
-		return std::copy(std::cbegin(s), std::cend(s), std::back_inserter(d));
-	}
-
-	template <class Destination, class Source>
-	auto concat_move(Destination &d, Source &s)
-	{
-		d.reserve(d.size() + s.size());
-		return std::move(std::begin(s), std::end(s), std::back_inserter(d));
-	}
-
-	template <class LookupContainer>
-	bool contains(const LookupContainer &c, const typename LookupContainer::value_type &v)
-	{
-		return find(c, v) != std::cend(c);
-	}
-
-	template <class LookupContainer>
-	bool contains_any(const LookupContainer &c, const LookupContainer &n)
-	{
-		return any_of(n, [&c](auto const &v) {
-			return contains(c, v);
-		});
 	}
 
 	template <class SourceContainer, class OutputIterator>
@@ -88,9 +50,9 @@ namespace std_ext {
 	}
 
 	template <class SourceContainer, class OutputIterator, class Predicate>
-	auto copy_if(const SourceContainer &src, OutputIterator &&dst, const Predicate &p)
+	auto copy_if(const SourceContainer &src, OutputIterator &&dst, Predicate &&p)
 	{
-		return std::copy_if(std::cbegin(src), std::cend(src), std::forward<OutputIterator>(dst), p);
+		return std::copy_if(std::cbegin(src), std::cend(src), std::forward<OutputIterator>(dst), std::forward<Predicate>(p));
 	}
 
 	template <class Container, class Value>
@@ -100,78 +62,39 @@ namespace std_ext {
 	}
 
 	template <class Container, class Predicate>
-	auto count_if(const Container &c, const Predicate &p)
+	auto count_if(const Container &c, Predicate &&p)
 	{
-		return std::count_if(std::cbegin(c), std::cend(c), p);
+		return std::count_if(std::cbegin(c), std::cend(c), std::forward<Predicate>(p));
 	}
 
 	template <class Container>
-	typename Container::iterator erase(Container &c, const typename Container::value_type &v)
+	auto find(const Container &c, const typename Container::value_type &v)
 	{
-		return c.erase(find(c, v));
+		return std::find(std::begin(c), std::end(c), v);
 	}
 
 	template <class Container, class Predicate>
-	typename Container::iterator erase_if(Container &c, const Predicate &p)
+	auto find_if(Container &c, Predicate &&p)
 	{
-		return c.erase(std::remove_if(std::begin(c), std::end(c), p), std::end(c));
+		return std::find_if(std::begin(c), std::end(c), std::forward<Predicate>(p));
+	}
+
+	template <class Container, class Predicate>
+	auto max_element(const Container &c, Predicate &&p)
+	{
+		return std::max_element(std::begin(c), std::end(c), std::forward<Predicate>(p));
 	}
 
 	template <class Container>
-	typename Container::const_iterator find(const Container &c, const typename Container::value_type &v)
+	auto min_element(const Container &c)
 	{
-		return std::find(std::cbegin(c), std::cend(c), v);
+		return std::min_element(std::begin(c), std::end(c));
 	}
 
 	template <class Container, class Predicate>
-	typename Container::iterator find_if(Container &c, const Predicate &p)
+	typename Container::iterator remove_if(Container &c, Predicate &&p)
 	{
-		return std::find_if(std::begin(c), std::end(c), p);
-	}
-
-	//const version of the above
-	template <class Container, class Predicate>
-	typename Container::const_iterator find_if(const Container &c, const Predicate &p)
-	{
-		return std::find_if(std::cbegin(c), std::cend(c), p);
-	}
-
-	template <class Container, class Predicate>
-	typename Container::const_iterator max_element(const Container &c, const Predicate &p)
-	{
-		return std::max_element(std::cbegin(c), std::cend(c), p);
-	}
-
-	template <class Container>
-	typename Container::const_iterator min_element(const Container &c)
-	{
-		return std::min_element(std::cbegin(c), std::cend(c));
-	}
-
-	template <class Container>
-	bool next_k_permutation(Container &c, int choose)
-	{
-		auto first = std::begin(c);
-		auto last = std::end(c);
-		std::reverse(first + choose, last);
-		return std::next_permutation(first, last);
-	}
-
-	template <class Container>
-	bool next_combination(Container &c, int choose)
-	{
-		bool result;
-		auto first = std::begin(c);
-		do {
-			result = next_k_permutation(c, choose);
-		} while (std::adjacent_find(first, first + choose, std::greater{}) != first + choose);
-		return result;
-	}
-
-	template <class Container, class Predicate>
-	typename Container::iterator remove_if(Container &c, const Predicate &p)
-	{
-		return std::remove_if(std::begin(c), std::end(c), p);
+		return std::remove_if(std::begin(c), std::end(c), std::forward<Predicate>(p));
 	}
 
 	template <class Container>
@@ -195,7 +118,7 @@ namespace std_ext {
 	template <class Container>
 	auto unique(Container &c)
 	{
-		assert(std::is_sorted(std::cbegin(c), std::cend(c)) && "Container should be sorted for erase_duplicates");
+		assert(std::is_sorted(std::cbegin(c), std::cend(c)) && "Container should be sorted");
 		return std::unique(std::begin(c), std::end(c));
 	}
 
@@ -203,6 +126,56 @@ namespace std_ext {
 	auto unique(Container &c, Comparator &&comp)
 	{
 		return std::unique(std::begin(c), std::end(c), std::forward<Comparator>(comp));
+	}
+
+	//utilities
+
+	template <class LookupContainer, class T, class Compare = std::less<>>
+	auto binary_find(const LookupContainer &c, const T &val, Compare comp = {})
+	{
+		auto last = std::cend(c);
+		auto first = std::lower_bound(std::cbegin(c), last, val, comp);
+		return first != last && !comp(val, *first) ? first : last;
+	}
+
+	template <class Destination, class Source>
+	auto concat(Destination &d, const Source &s)
+	{
+		d.reserve(d.size() + s.size());
+		return std::copy(std::cbegin(s), std::cend(s), std::back_inserter(d));
+	}
+
+	template <class Destination, class Source>
+	auto concat_move(Destination &d, Source &s)
+	{
+		d.reserve(d.size() + s.size());
+		return std::move(std::begin(s), std::end(s), std::back_inserter(d));
+	}
+
+	template <class LookupContainer, class Value>
+	bool contains(const LookupContainer &c, Value &&v)
+	{
+		return std::find(std::cbegin(c), std::cend(c), std::forward<Value>(v)) != std::cend(c);
+	}
+
+	template <class LookupContainer>
+	bool contains_any(const LookupContainer &haystack, const LookupContainer &needles)
+	{
+		return any_of(needles, [&haystack](auto const &n) {
+			return contains(haystack, n);
+		});
+	}
+
+	template <class Container>
+	auto erase(Container &c, const typename Container::value_type &v)
+	{
+		return c.erase(find(c, v));
+	}
+
+	template <class Container, class Predicate>
+	auto erase_if(Container &c, Predicate &&p)
+	{
+		return c.erase(std::remove_if(std::begin(c), std::end(c), std::forward<Predicate>(p)), std::end(c));
 	}
 
 	//removes duplicate values from given sorted container
@@ -217,6 +190,26 @@ namespace std_ext {
 	void erase_duplicates(Container &c, Comparator &&comp)
 	{
 		c.erase(unique(c, std::forward<Comparator>(comp)), std::end(c));
+	}
+
+	template <class Container>
+	bool next_k_permutation(Container &c, int choose)
+	{
+		auto first = std::begin(c);
+		auto last = std::end(c);
+		std::reverse(first + choose, last);
+		return std::next_permutation(first, last);
+	}
+
+	template <class Container>
+	bool next_combination(Container &c, int choose)
+	{
+		bool result;
+		auto first = std::begin(c);
+		do {
+			result = next_k_permutation(c, choose);
+		} while (std::adjacent_find(first, first + choose, std::greater{}) != first + choose);
+		return result;
 	}
 }
 
