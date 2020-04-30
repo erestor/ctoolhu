@@ -5,7 +5,6 @@
 #define _ctoolhu_maths_comparer_included_
 
 #include <cstdlib>
-#include <limits>
 
 namespace Ctoolhu::Maths {
 
@@ -16,7 +15,7 @@ namespace Ctoolhu::Maths {
 	>
 	class Comparer {
 
-		public:
+	  public:
 
 		template <class Numeric>
 		static bool equal(Decimal a, Numeric b)
@@ -49,9 +48,9 @@ namespace Ctoolhu::Maths {
 			return equal(a, b) || a > b;
 		}
 
-		private:
+	  private:
 
-		static const int _precision{Precision};
+		static constexpr int _precision{Precision};
 		//it would be great to have static epsilon here, but constexpr power doesn't exist
 	};
 

@@ -67,10 +67,10 @@ namespace std_ext {
 		return std::count_if(std::cbegin(c), std::cend(c), std::forward<Predicate>(p));
 	}
 
-	template <class Container>
-	auto find(const Container &c, const typename Container::value_type &v)
+	template <class Container, class Value>
+	auto find(const Container &c, const Value &v)
 	{
-		return std::find(std::begin(c), std::end(c), v);
+		return std::find(std::cbegin(c), std::cend(c), v);
 	}
 
 	template <class Container, class Predicate>
@@ -79,16 +79,22 @@ namespace std_ext {
 		return std::find_if(std::begin(c), std::end(c), std::forward<Predicate>(p));
 	}
 
+	template <class Container>
+	auto max_element(const Container &c)
+	{
+		return std::max_element(std::cbegin(c), std::cend(c));
+	}
+
 	template <class Container, class Predicate>
 	auto max_element(const Container &c, Predicate &&p)
 	{
-		return std::max_element(std::begin(c), std::end(c), std::forward<Predicate>(p));
+		return std::max_element(std::cbegin(c), std::cend(c), std::forward<Predicate>(p));
 	}
 
 	template <class Container>
 	auto min_element(const Container &c)
 	{
-		return std::min_element(std::begin(c), std::end(c));
+		return std::min_element(std::cbegin(c), std::cend(c));
 	}
 
 	template <class Container, class Predicate>
@@ -166,8 +172,8 @@ namespace std_ext {
 		});
 	}
 
-	template <class Container>
-	auto erase(Container &c, const typename Container::value_type &v)
+	template <class Container, class Value>
+	auto erase(Container &c, const Value &v)
 	{
 		return c.erase(find(c, v));
 	}

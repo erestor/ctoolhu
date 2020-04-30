@@ -76,6 +76,9 @@
     <ClInclude Include="ctoolhu\event\firer.hpp" />
     <ClInclude Include="ctoolhu\event\subscriber.hpp" />
     <ClInclude Include="ctoolhu\maths\comparer.hpp" />
+    <ClInclude Include="ctoolhu\memory\allocator.hpp" />
+    <ClInclude Include="ctoolhu\memory\object_pool.hpp" />
+    <ClInclude Include="ctoolhu\memory\object_pool_deleter.hpp" />
     <ClInclude Include="ctoolhu\property_tree\ptree_ext.hpp" />
     <ClInclude Include="ctoolhu\random\engine.hpp" />
     <ClInclude Include="ctoolhu\random\generator.hpp" />

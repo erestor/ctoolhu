@@ -125,6 +125,7 @@ namespace Ctoolhu::TypeSafe {
 		}
 	};
 
+	static_assert(sizeof(int) == sizeof(Id<int, int, ImplicitConversion>));
 	static_assert(std::is_trivial_v<Id<int, int, ImplicitConversion>>);
 	static_assert(std::is_trivial_v<Id<int, int, ExplicitConversion>>);
 
