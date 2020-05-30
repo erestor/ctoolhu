@@ -4,6 +4,8 @@
 #ifndef _ctoolhu_thread_proxy_included_
 #define _ctoolhu_thread_proxy_included_
 
+#include <utility>
+
 namespace Ctoolhu::Thread {
 
 	//Provides object-level locking for any lockable class.
@@ -21,8 +23,13 @@ namespace Ctoolhu::Thread {
 
 		LockingProxy(LockingProxy &&src)
 		{
-			_client = src._client;
-			src._client = nullptr;
+			_client = std::exchange(src._client, nullptr);
+		}
+
+		LockingProxy &operator =(LockingProxy &&src)
+		{
+			_client = std::exchange(src._client, nullptr);
+			return *this;
 		}
 
 		~LockingProxy()
