@@ -68,6 +68,12 @@ namespace std_ext {
 	}
 
 	template <class Container, class Value>
+	auto count_sorted(const Container &c, Value v)
+	{
+		return std::distance(std::lower_bound(std::cbegin(c), std::cend(c), v), std::upper_bound(std::cbegin(c), std::cend(c), v));
+	}
+
+	template <class Container, class Value>
 	auto find(const Container &c, const Value &v)
 	{
 		return std::find(std::cbegin(c), std::cend(c), v);
@@ -79,20 +85,26 @@ namespace std_ext {
 		return std::find_if(std::begin(c), std::end(c), std::forward<Predicate>(p));
 	}
 
+	template<class Container, class Value>
+	auto insert_sorted(Container& c, const Value &v)
+	{
+		return c.insert(std::upper_bound(c.begin(), c.end(), v), v);
+	}
+
 	template <class Container>
-	auto max_element(const Container &c)
+	auto max_element(const Container &c) noexcept
 	{
 		return std::max_element(std::cbegin(c), std::cend(c));
 	}
 
 	template <class Container, class Predicate>
-	auto max_element(const Container &c, Predicate &&p)
+	auto max_element(const Container &c, Predicate &&p) noexcept
 	{
 		return std::max_element(std::cbegin(c), std::cend(c), std::forward<Predicate>(p));
 	}
 
 	template <class Container>
-	auto min_element(const Container &c)
+	auto min_element(const Container &c) noexcept
 	{
 		return std::min_element(std::cbegin(c), std::cend(c));
 	}
@@ -164,8 +176,8 @@ namespace std_ext {
 		return std::find(std::cbegin(c), std::cend(c), std::forward<Value>(v)) != std::cend(c);
 	}
 
-	template <class LookupContainer>
-	bool contains_any(const LookupContainer &haystack, const LookupContainer &needles)
+	template <class HayContainer, class NeedleContainer>
+	bool contains_any(const HayContainer &haystack, const NeedleContainer &needles)
 	{
 		return any_of(needles, [&haystack](auto const &n) {
 			return contains(haystack, n);
@@ -201,8 +213,8 @@ namespace std_ext {
 	template <class Container>
 	bool next_k_permutation(Container &c, int choose)
 	{
-		auto first = std::begin(c);
-		auto last = std::end(c);
+		auto const first = std::begin(c);
+		auto const last = std::end(c);
 		std::reverse(first + choose, last);
 		return std::next_permutation(first, last);
 	}
@@ -211,7 +223,7 @@ namespace std_ext {
 	bool next_combination(Container &c, int choose)
 	{
 		bool result;
-		auto first = std::begin(c);
+		auto const first = std::begin(c);
 		do {
 			result = next_k_permutation(c, choose);
 		} while (std::adjacent_find(first, first + choose, std::greater{}) != first + choose);
