@@ -50,7 +50,7 @@ namespace Ctoolhu::Memory {
 
 		using unique_ptr_t = std::unique_ptr<T, deleter_t &>;
 
-		ObjectPool() : _deleter(this) {}
+		ObjectPool() noexcept : _deleter(this) {}
 
 		template <class... Args>
 		unique_ptr_t make_unique(Args &&... args)

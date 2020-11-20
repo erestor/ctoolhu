@@ -23,11 +23,11 @@ namespace Ctoolhu::Visitor {
 
 	  public:
 
-		typename Visitor::ret_t accept(const Visitor &v) {
+		typename Visitor::ret_t accept(const Visitor &v) override {
 			return v.visit(static_cast<Derived &>(*this));
 		}
 
-		typename Visitor::ret_t accept(const Visitor &v) const {
+		typename Visitor::ret_t accept(const Visitor &v) const override {
 			return v.visit(static_cast<const Derived &>(*this));
 		}
 

@@ -18,32 +18,32 @@ namespace Ctoolhu::Maths {
 	  public:
 
 		template <class Numeric>
-		static bool equal(Decimal a, Numeric b)
+		static bool equal(Decimal a, Numeric b) noexcept
 		{
 			static float epsilon = std::pow(10.0f, -_precision);
 			return std::abs(a - static_cast<Decimal>(b)) < epsilon;
 		}
 
 		template <class Numeric>
-		static bool less(Decimal a, Numeric b)
+		static bool less(Decimal a, Numeric b) noexcept
 		{
 			return !equal(a, b) && a < b;
 		}
 
 		template <class Numeric>
-		static bool lessOrEqual(Decimal a, Numeric b)
+		static bool lessOrEqual(Decimal a, Numeric b) noexcept
 		{
 			return equal(a, b) || a < b;
 		}
 
 		template <class Numeric>
-		static bool greater(Decimal a, Numeric b)
+		static bool greater(Decimal a, Numeric b) noexcept
 		{
 			return !equal(a, b) && a > b;
 		}
 
 		template <class Numeric>
-		static bool greaterOrEqual(Decimal a, Numeric b)
+		static bool greaterOrEqual(Decimal a, Numeric b) noexcept
 		{
 			return equal(a, b) || a > b;
 		}

@@ -38,7 +38,7 @@ namespace Ctoolhu::Thread {
 				_client->Unlock();
 		}
 
-		T *operator ->() const
+		T *operator ->() const noexcept
 		{
 			return _client;
 		}

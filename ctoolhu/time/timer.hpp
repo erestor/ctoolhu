@@ -19,17 +19,17 @@ namespace Ctoolhu::Time {
 		using duration_t = Resolution;
 		using clock_t = std::chrono::steady_clock;
 
-		Timer()
+		Timer() noexcept
 		{
 			StartClock();
 		}
 
-		void StartClock()
+		void StartClock() noexcept
 		{
 			_startTime = clock_t::now();
 		}
 
-		duration_t ElapsedTime() const
+		duration_t ElapsedTime() const noexcept
 		{
 			return std::chrono::duration_cast<duration_t>(clock_t::now() - _startTime);
 		}
