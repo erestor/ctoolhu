@@ -3,6 +3,7 @@
 
 namespace Ctoolhu::Visitor {
 
+	//base class for visitor hierarchy of mutable types
 	template <class ReturnType, class... VisitedTypes>
 	class Visitor {
 
@@ -25,7 +26,7 @@ namespace Ctoolhu::Visitor {
 		virtual ReturnType visit(Visited &) const = 0;
 	};
 
-
+	//base class for visitor hierarchy of const types
 	template <class ReturnType, class... VisitedTypes>
 	class ConstVisitor {
 
