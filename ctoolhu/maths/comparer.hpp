@@ -20,7 +20,7 @@ namespace Ctoolhu::Maths {
 		template <class Numeric>
 		static bool equal(Decimal a, Numeric b) noexcept
 		{
-			static float epsilon = std::pow(10.0f, -_precision);
+			static auto epsilon = std::pow(10.0f, -_precision);
 			return std::abs(a - static_cast<Decimal>(b)) < epsilon;
 		}
 
