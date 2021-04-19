@@ -18,6 +18,8 @@ What does it give you?
   - event aggregator with auto-subscription
 - maths
   - epsilon-based floating point comparison
+- memory
+  - extension of boost::object_pool for use with std::unique_ptr
 - property_tree
   - simplifies JSON conversion with boost::property_tree
 - random
