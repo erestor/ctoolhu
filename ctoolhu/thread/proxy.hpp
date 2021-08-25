@@ -26,11 +26,14 @@ namespace Ctoolhu::Thread {
 			_client = std::exchange(src._client, nullptr);
 		}
 
-		LockingProxy &operator =(LockingProxy &&src)
+		LockingProxy &operator=(LockingProxy &&src)
 		{
 			_client = std::exchange(src._client, nullptr);
 			return *this;
 		}
+
+		LockingProxy(const LockingProxy &) = delete;
+		LockingProxy &operator=(const LockingProxy &) = delete;
 
 		~LockingProxy()
 		{
@@ -38,13 +41,10 @@ namespace Ctoolhu::Thread {
 				_client->Unlock();
 		}
 
-		T *operator ->() const noexcept
+		T *operator->() const noexcept
 		{
 			return _client;
 		}
-
-		LockingProxy(const LockingProxy &) = delete;
-		LockingProxy &operator =(const LockingProxy &) = delete;
 
 	  private:
 

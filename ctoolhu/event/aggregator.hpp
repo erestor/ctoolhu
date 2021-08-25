@@ -21,7 +21,7 @@ namespace Ctoolhu::Event {
 		  public:
 
 			Aggregator(const Aggregator &) = delete;
-			Aggregator &operator =(const Aggregator &) = delete;
+			Aggregator &operator=(const Aggregator &) = delete;
 
 			using signal_t = boost::signals2::signal<void (Event *)>;
 			using slot_t = typename signal_t::slot_type;

@@ -47,8 +47,8 @@ namespace Ctoolhu::Event {
 
 		Subscriber(const Subscriber &) = delete;
 		Subscriber(Subscriber &&) = delete;
-		Subscriber &operator =(const Subscriber &) = delete;
-		Subscriber &operator =(Subscriber &&) = delete;
+		Subscriber &operator=(const Subscriber &) = delete;
+		Subscriber &operator=(Subscriber &&) = delete;
 
 		using base_t::on;
 		virtual void on(Event *) = 0;	//override this in the child class
@@ -117,7 +117,7 @@ namespace Ctoolhu::Event {
 		}
 
 		ManualSubscriber(const ManualSubscriber &) = delete;
-		ManualSubscriber &operator =(const ManualSubscriber &) = delete;
+		ManualSubscriber &operator=(const ManualSubscriber &) = delete;
 
 	  private:
 
