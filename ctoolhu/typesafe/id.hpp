@@ -4,6 +4,7 @@
 #ifndef _ctoolhu_typesafe_id_included_
 #define _ctoolhu_typesafe_id_included_
 
+#include <compare>
 #include <iosfwd>
 #include <type_traits>
 
@@ -17,37 +18,9 @@ namespace Ctoolhu::TypeSafe {
 			
 		  public:
 
-			constexpr bool operator ==(Storage comp) const noexcept
-			{
-				return _id == comp._id;
-			}
+			constexpr auto operator<=>(const Storage &) const noexcept = default;
 
-			constexpr bool operator !=(Storage comp) const noexcept
-			{
-				return _id != comp._id;
-			}
-
-			constexpr bool operator <(Storage comp) const noexcept
-			{
-				return _id < comp._id;
-			}
-
-			constexpr bool operator >(Storage comp) const noexcept
-			{
-				return _id > comp._id;
-			}
-
-			constexpr bool operator <=(Storage comp) const noexcept
-			{
-				return _id <= comp._id;
-			}
-
-			constexpr bool operator >=(Storage comp) const noexcept
-			{
-				return _id >= comp._id;
-			}
-
-			friend std::ostream &operator <<(std::ostream &out, Storage storage)
+			friend std::ostream &operator<<(std::ostream &out, Storage storage)
 			{
 				return out << storage._id;
 			}
