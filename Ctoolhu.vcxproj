@@ -84,7 +84,6 @@
     <ClInclude Include="ctoolhu\random\generator.hpp" />
     <ClInclude Include="ctoolhu\random\selector.hpp" />
     <ClInclude Include="ctoolhu\singleton\holder.hpp" />
-    <ClInclude Include="ctoolhu\singleton\loki\LokiExport.h" />
     <ClInclude Include="ctoolhu\singleton\loki\Singleton.h" />
     <ClInclude Include="ctoolhu\singleton\loki\Threads.h" />
     <ClInclude Include="ctoolhu\std_ext.hpp" />

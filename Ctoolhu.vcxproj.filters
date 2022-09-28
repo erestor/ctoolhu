@@ -111,9 +111,6 @@
     <ClInclude Include="ctoolhu\memory\allocator.hpp">
       <Filter>ctoolhu\memory</Filter>
     </ClInclude>
-    <ClInclude Include="ctoolhu\singleton\loki\LokiExport.h">
-      <Filter>ctoolhu\singleton\loki</Filter>
-    </ClInclude>
     <ClInclude Include="ctoolhu\singleton\loki\Singleton.h">
       <Filter>ctoolhu\singleton\loki</Filter>
     </ClInclude>
