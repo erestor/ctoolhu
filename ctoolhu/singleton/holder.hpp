@@ -4,7 +4,7 @@
 #ifndef _ctoolhu_singleton_holder_included_
 #define _ctoolhu_singleton_holder_included_
 
-#include <loki/Singleton.h>
+#include "loki/Singleton.h"
 
 namespace Ctoolhu::Singleton {
 

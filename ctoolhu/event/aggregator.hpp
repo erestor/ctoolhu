@@ -5,7 +5,6 @@
 #define _ctoolhu_event_aggregator_included_
 
 #include "../singleton/holder.hpp"
-#include <loki/Singleton.h>
 #include <boost/signals2.hpp>
 
 namespace Ctoolhu::Event {

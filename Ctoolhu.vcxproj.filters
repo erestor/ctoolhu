@@ -34,6 +34,9 @@
     <Filter Include="ctoolhu\memory">
       <UniqueIdentifier>{829b9c80-f042-481a-860b-03a687cc0c3e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ctoolhu\singleton\loki">
+      <UniqueIdentifier>{d67fae63-2391-4a8b-8aca-8268aff84b75}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ctoolhu\event\aggregator.hpp">
@@ -107,6 +110,15 @@
     </ClInclude>
     <ClInclude Include="ctoolhu\memory\allocator.hpp">
       <Filter>ctoolhu\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="ctoolhu\singleton\loki\LokiExport.h">
+      <Filter>ctoolhu\singleton\loki</Filter>
+    </ClInclude>
+    <ClInclude Include="ctoolhu\singleton\loki\Singleton.h">
+      <Filter>ctoolhu\singleton\loki</Filter>
+    </ClInclude>
+    <ClInclude Include="ctoolhu\singleton\loki\Threads.h">
+      <Filter>ctoolhu\singleton\loki</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
