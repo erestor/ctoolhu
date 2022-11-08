@@ -85,7 +85,6 @@
     <ClInclude Include="ctoolhu\random\selector.hpp" />
     <ClInclude Include="ctoolhu\singleton\holder.hpp" />
     <ClInclude Include="ctoolhu\singleton\loki\Singleton.h" />
-    <ClInclude Include="ctoolhu\singleton\loki\Threads.h" />
     <ClInclude Include="ctoolhu\std_ext.hpp" />
     <ClInclude Include="ctoolhu\thread\async.hpp" />
     <ClInclude Include="ctoolhu\thread\future.hpp" />

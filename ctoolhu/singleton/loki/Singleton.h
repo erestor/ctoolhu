@@ -20,7 +20,6 @@
 
 // $Id: Singleton.h 834 2007-08-02 19:36:10Z syntheticpp $
 
-#include "Threads.h"
 #include <stdexcept>
 #include <cassert>
 #include <cstdlib>
@@ -97,16 +96,12 @@ namespace Loki
     ///  
     ///  \param CreationPolicy Creation policy, default: CreateUsingNew
     ///  \param LifetimePolicy Lifetime policy, default: DefaultLifetime,
-    ///  \param ThreadingModel Threading policy, 
-    ///                         default: LOKI_DEFAULT_THREADING_NO_OBJ_LEVEL
     ////////////////////////////////////////////////////////////////////////////////
     template
     <
         typename T,
         template <class> class CreationPolicy = CreateUsingNew,
-        template <class> class LifetimePolicy = DefaultLifetime,
-        template <class, class> class ThreadingModel = LOKI_DEFAULT_THREADING_NO_OBJ_LEVEL,
-        class MutexPolicy = LOKI_DEFAULT_MUTEX
+        template <class> class LifetimePolicy = DefaultLifetime
     >
     class SingletonHolder
     {
@@ -127,7 +122,7 @@ namespace Loki
         SingletonHolder();
         
         // Data
-        typedef typename ThreadingModel<T*,MutexPolicy>::VolatileType PtrInstanceType;
+        using PtrInstanceType = T*;
         static PtrInstanceType pInstance_;
         static bool destroyed_;
     };
@@ -140,22 +135,18 @@ namespace Loki
     <
         class T,
         template <class> class C,
-        template <class> class L,
-        template <class, class> class M,
-        class X
+        template <class> class L
     >
-    typename SingletonHolder<T, C, L, M, X>::PtrInstanceType
-        SingletonHolder<T, C, L, M, X>::pInstance_ = 0;
+    typename SingletonHolder<T, C, L>::PtrInstanceType
+        SingletonHolder<T, C, L>::pInstance_ = 0;
 
     template
     <
         class T,
         template <class> class C,
-        template <class> class L,
-        template <class, class> class M,
-        class X
+        template <class> class L
     >
-    bool SingletonHolder<T, C, L, M, X>::destroyed_ = false;
+    bool SingletonHolder<T, C, L>::destroyed_ = false;
 
     ////////////////////////////////////////////////////////////////////////////////
     // SingletonHolder::Instance
@@ -165,12 +156,9 @@ namespace Loki
     <
         class T,
         template <class> class CreationPolicy,
-        template <class> class LifetimePolicy,
-        template <class, class> class ThreadingModel,
-        class MutexPolicy
+        template <class> class LifetimePolicy
     >
-    inline T& SingletonHolder<T, CreationPolicy, 
-        LifetimePolicy, ThreadingModel, MutexPolicy>::Instance()
+    inline T& SingletonHolder<T, CreationPolicy, LifetimePolicy>::Instance()
     {
         if (!pInstance_)
         {
@@ -187,16 +175,10 @@ namespace Loki
     <
         class T,
         template <class> class CreationPolicy,
-        template <class> class LifetimePolicy,
-        template <class, class> class ThreadingModel,
-        class MutexPolicy
+        template <class> class LifetimePolicy
     >
-    void SingletonHolder<T, CreationPolicy, 
-        LifetimePolicy, ThreadingModel, MutexPolicy>::MakeInstance()
+    void SingletonHolder<T, CreationPolicy, LifetimePolicy>::MakeInstance()
     {
-        typename ThreadingModel<SingletonHolder,MutexPolicy>::Lock guard;
-        (void)guard;
-        
         if (!pInstance_)
         {
             if (destroyed_)
@@ -205,8 +187,7 @@ namespace Loki
                 LifetimePolicy<T>::OnDeadReference();
             }
             pInstance_ = CreationPolicy<T>::Create();
-            LifetimePolicy<T>::ScheduleDestruction(pInstance_, 
-                &DestroySingleton);
+            LifetimePolicy<T>::ScheduleDestruction(pInstance_, &DestroySingleton);
         }
     }
 
@@ -214,12 +195,10 @@ namespace Loki
     <
         class T,
         template <class> class CreationPolicy,
-        template <class> class L,
-        template <class, class> class M,
-        class X
+        template <class> class L
     >
     void LOKI_C_CALLING_CONVENTION_QUALIFIER 
-    SingletonHolder<T, CreationPolicy, L, M, X>::DestroySingleton()
+    SingletonHolder<T, CreationPolicy, L>::DestroySingleton()
     {
         assert(!destroyed_);
         CreationPolicy<T>::Destroy(pInstance_);
@@ -230,4 +209,3 @@ namespace Loki
 } // namespace Loki
 
 #endif // end file guardian
-

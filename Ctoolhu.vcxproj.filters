@@ -114,9 +114,6 @@
     <ClInclude Include="ctoolhu\singleton\loki\Singleton.h">
       <Filter>ctoolhu\singleton\loki</Filter>
     </ClInclude>
-    <ClInclude Include="ctoolhu\singleton\loki\Threads.h">
-      <Filter>ctoolhu\singleton\loki</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="Ctoolhu.natvis" />
