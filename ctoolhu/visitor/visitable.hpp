@@ -31,6 +31,8 @@ namespace Ctoolhu::Visitor {
 			return v.visit(static_cast<const Derived &>(*this));
 		}
 
+		constexpr bool operator==(const Visitable<Derived, Root, Visitor> &) const noexcept { return true; };
+
 	  protected:
 
 		using Root::Root;
