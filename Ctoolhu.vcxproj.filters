@@ -37,6 +37,9 @@
     <Filter Include="ctoolhu\singleton\loki">
       <UniqueIdentifier>{d67fae63-2391-4a8b-8aca-8268aff84b75}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ctoolhu\filesystem">
+      <UniqueIdentifier>{6b1f32ec-ab04-49d4-b436-39d0d28fbdd6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ctoolhu\event\aggregator.hpp">
@@ -113,6 +116,9 @@
     </ClInclude>
     <ClInclude Include="ctoolhu\singleton\loki\Singleton.h">
       <Filter>ctoolhu\singleton\loki</Filter>
+    </ClInclude>
+    <ClInclude Include="ctoolhu\filesystem\directory_creator.hpp">
+      <Filter>ctoolhu\filesystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

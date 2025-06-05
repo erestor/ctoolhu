@@ -61,7 +61,7 @@ namespace Ctoolhu::Thread {
 		*/
 		bool waitPop(T &out)
 		{
-			std::unique_lock<std::mutex> lock{_mutex};
+			std::unique_lock lock{_mutex};
 			_changed.wait(lock, [this]() {
 				return !_queue.empty() || !_valid;
 			});
