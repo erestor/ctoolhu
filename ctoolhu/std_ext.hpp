@@ -8,9 +8,9 @@
 #include <cassert>
 #include <iterator>
 #include <numeric>
-#include <type_traits>
+#include <ranges>
 
-//this is a std extension by purpose, so will stay outside the Ctoolhu namespace
+//this is a std extension by purpose, so stays outside the Ctoolhu namespace
 
 namespace std_ext {
 
@@ -26,46 +26,10 @@ namespace std_ext {
 		return std::accumulate(std::cbegin(c), std::cend(c), init, std::forward<Reductor>(r));
 	}
 
-	template <class Container, class Predicate>
-	bool all_of(const Container &c, const Predicate &p)
-	{
-		return std::all_of(std::cbegin(c), std::cend(c), p);
-	}
-
-	template <class Container, class Predicate>
-	bool any_of(const Container &c, const Predicate &p)
-	{
-		return std::any_of(std::cbegin(c), std::cend(c), p);
-	}
-
 	template <class LookupContainer, class T>
 	bool binary_search(const LookupContainer &c, const T &v)
 	{
 		return std::binary_search(std::cbegin(c), std::cend(c), v);
-	}
-
-	template <class SourceContainer, class OutputIterator>
-	auto copy(const SourceContainer &src, OutputIterator &&dst)
-	{
-		return std::copy(std::cbegin(src), std::cend(src), std::forward<OutputIterator>(dst));
-	}
-
-	template <class SourceContainer, class OutputIterator, class Predicate>
-	auto copy_if(const SourceContainer &src, OutputIterator &&dst, Predicate &&p)
-	{
-		return std::copy_if(std::cbegin(src), std::cend(src), std::forward<OutputIterator>(dst), std::forward<Predicate>(p));
-	}
-
-	template <class Container, class Value>
-	auto count(const Container &c, Value v)
-	{
-		return std::count(std::cbegin(c), std::cend(c), v);
-	}
-
-	template <class Container, class Predicate>
-	auto count_if(const Container &c, Predicate &&p)
-	{
-		return std::count_if(std::cbegin(c), std::cend(c), std::forward<Predicate>(p));
 	}
 
 	template <class Container, class Value>
@@ -74,64 +38,10 @@ namespace std_ext {
 		return std::distance(std::lower_bound(std::cbegin(c), std::cend(c), v), std::upper_bound(std::cbegin(c), std::cend(c), v));
 	}
 
-	template <class Container, class Value>
-	auto find(const Container &c, const Value &v)
-	{
-		return std::find(std::cbegin(c), std::cend(c), v);
-	}
-
-	template <class Container, class Predicate>
-	auto find_if(Container &c, Predicate &&p)
-	{
-		return std::find_if(std::begin(c), std::end(c), std::forward<Predicate>(p));
-	}
-
 	template<class Container, class Value>
 	auto insert_sorted(Container& c, const Value &v)
 	{
 		return c.insert(std::upper_bound(c.begin(), c.end(), v), v);
-	}
-
-	template <class Container>
-	auto max_element(const Container &c) noexcept
-	{
-		return std::max_element(std::cbegin(c), std::cend(c));
-	}
-
-	template <class Container, class Predicate>
-	auto max_element(const Container &c, Predicate &&p) noexcept
-	{
-		return std::max_element(std::cbegin(c), std::cend(c), std::forward<Predicate>(p));
-	}
-
-	template <class Container>
-	auto min_element(const Container &c) noexcept
-	{
-		return std::min_element(std::cbegin(c), std::cend(c));
-	}
-
-	template <class Container, class Predicate>
-	typename Container::iterator remove_if(Container &c, Predicate &&p)
-	{
-		return std::remove_if(std::begin(c), std::end(c), std::forward<Predicate>(p));
-	}
-
-	template <class Container>
-	void sort(Container &c)
-	{
-		std::sort(std::begin(c), std::end(c));
-	}
-
-	template <class Container, class Comparator>
-	void sort(Container &c, Comparator &&comp)
-	{
-		std::sort(std::begin(c), std::end(c), std::forward<Comparator>(comp));
-	}
-
-	template <class Container, class OutputIterator, class Reductor>
-	void transform(const Container &src, OutputIterator &&dst, Reductor &&r)
-	{
-		std::transform(std::cbegin(src), std::cend(src), std::forward<OutputIterator>(dst), std::forward<Reductor>(r));
 	}
 
 	template <class Container>
@@ -174,13 +84,13 @@ namespace std_ext {
 	template <class LookupContainer, class Value>
 	bool contains(const LookupContainer &c, Value &&v)
 	{
-		return std::find(std::cbegin(c), std::cend(c), std::forward<Value>(v)) != std::cend(c);
+		return std::ranges::find(c, std::forward<Value>(v)) != std::cend(c);
 	}
 
 	template <class HayContainer, class NeedleContainer>
 	bool contains_any(const HayContainer &haystack, const NeedleContainer &needles)
 	{
-		return any_of(needles, [&haystack](auto const &n) {
+		return std::ranges::any_of(needles, [&haystack](auto const &n) {
 			return contains(haystack, n);
 		});
 	}
@@ -188,7 +98,7 @@ namespace std_ext {
 	template <class Container, class Value>
 	auto erase(Container &c, const Value &v)
 	{
-		return c.erase(find(c, v));
+		return c.erase(std::find(std::begin(c), std::end(c), v));
 	}
 
 	template <class Container, class Predicate>
