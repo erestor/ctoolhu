@@ -56,10 +56,7 @@ namespace Ctoolhu::TypeSafe {
 
 	  public:
 
-		constexpr explicit operator IdType() const noexcept
-		{
-			return this->_id;
-		}
+		constexpr auto value() const noexcept { return this->_id; }
 
 	  protected:
 
@@ -81,7 +78,7 @@ namespace Ctoolhu::TypeSafe {
 	template <
 		class RequestingObject,		//type of the object which will have this id
 		typename IdType = int,		//type of the id that would normally be used
-		template <typename> class ConversionPolicy = ImplicitConversion
+		template <typename> class ConversionPolicy = ExplicitConversion
 	>
 	class Id : public ConversionPolicy<IdType> {
 
@@ -99,6 +96,7 @@ namespace Ctoolhu::TypeSafe {
 	};
 
 	static_assert(sizeof(int) == sizeof(Id<int, int, ImplicitConversion>));
+	static_assert(sizeof(int) == sizeof(Id<int, int, ExplicitConversion>));
 	static_assert(std::is_trivial_v<Id<int, int, ImplicitConversion>>);
 	static_assert(std::is_trivial_v<Id<int, int, ExplicitConversion>>);
 
