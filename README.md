@@ -4,7 +4,7 @@ Ctoolhu
 What is it?
 
 - C++ library featuring general tools and lightweight implementations of some design patterns
-- using modern C++, <a href="http://boost.org">Boost</a> & <a href="http://loki-lib.sourceforge.net/">Loki</a>, platform-independent
+- using modern C++, <a href="http://boost.org">Boost</a> & <a href="http://loki-lib.sourceforge.net/">Loki</a> singleton, platform-independent
 - compatible with <a href="https://github.com/emscripten-core/emscripten">Emscripten</a> for building WebAssembly
 
 Where is it?
@@ -16,6 +16,8 @@ What does it give you?
 
 - event
   - event aggregator with auto-subscription
+- filesystem
+  - automatic directory creation
 - maths
   - epsilon-based floating point comparison
 - memory
@@ -28,14 +30,14 @@ What does it give you?
 - singleton
   - singleton holder with variable lifetime (esp. for Emscripten builds)
 - std_ext
-  - simplifies typical usage of standard library algorithms
+  - simplifies usage of some standard library algorithms
 - thread
   - locking proxy for object-level locking
   - implementation of async using a thread pool (esp. for Emscripten builds)
 - time
   - stopwatch for duration measurement
 - typesafe
-  - type-safe integers
+  - type-safe id mechanism
 - visitor
   - boilerplate for implementing the visitor pattern
 
