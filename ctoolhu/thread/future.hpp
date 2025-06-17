@@ -26,7 +26,7 @@ namespace Ctoolhu::Thread {
 
 	  public:
 
-		Future(std::future<T> &&future)
+		constexpr Future(std::future<T> &&future)
 			: _future{std::move(future)}
 		{
 		}
@@ -36,16 +36,16 @@ namespace Ctoolhu::Thread {
 		Future &operator=(const Future &) = delete;
 
 		//allow moving
-		Future(Future &&) = default;
-		Future &operator=(Future &&) = default;
+		constexpr Future(Future &&) = default;
+		constexpr Future &operator=(Future &&) = default;
 
-		~Future()
+		constexpr ~Future()
 		{
 			if (_future.valid())
 				_future.get();
 		}
 
-		auto get()
+		constexpr auto get()
 		{
 			return _future.get();
 		}
