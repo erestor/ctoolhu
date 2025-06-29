@@ -9,8 +9,8 @@ namespace Ctoolhu::Visitor {
 
 	  public:
 
-		virtual bool accept(const Visitor &) = 0;
-		virtual bool accept(const Visitor &) const = 0;
+		virtual Visitor::ret_t accept(const Visitor &) = 0;
+		virtual Visitor::ret_t accept(const Visitor &) const = 0;
 	};
 
 	//derived classes of the visitable hierarchy
@@ -23,15 +23,13 @@ namespace Ctoolhu::Visitor {
 
 	  public:
 
-		typename Visitor::ret_t accept(const Visitor &v) override {
+		Visitor::ret_t accept(const Visitor &v) final {
 			return v.visit(static_cast<Derived &>(*this));
 		}
 
-		typename Visitor::ret_t accept(const Visitor &v) const override {
+		Visitor::ret_t accept(const Visitor &v) const final {
 			return v.visit(static_cast<const Derived &>(*this));
 		}
-
-		constexpr bool operator==(const Visitable<Derived, Root, Visitor> &) const noexcept { return true; };
 
 	  protected:
 
