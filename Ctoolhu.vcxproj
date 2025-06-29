@@ -74,6 +74,7 @@
     <ClInclude Include="ctoolhu\event\aggregator.hpp" />
     <ClInclude Include="ctoolhu\event\events.h" />
     <ClInclude Include="ctoolhu\event\firer.hpp" />
+    <ClInclude Include="ctoolhu\event\free_subscriber.hpp" />
     <ClInclude Include="ctoolhu\event\subscriber.hpp" />
     <ClInclude Include="ctoolhu\filesystem\directory_creator.hpp" />
     <ClInclude Include="ctoolhu\maths\comparer.hpp" />

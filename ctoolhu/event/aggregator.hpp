@@ -21,6 +21,8 @@ namespace Ctoolhu::Event {
 
 			Aggregator(const Aggregator &) = delete;
 			Aggregator &operator=(const Aggregator &) = delete;
+			Aggregator(Aggregator &&) = delete;
+			Aggregator &operator=(Aggregator &&) = delete;
 
 			using signal_t = boost::signals2::signal<void (Event *)>;
 			using slot_t = typename signal_t::slot_type;
@@ -32,7 +34,7 @@ namespace Ctoolhu::Event {
 
 			void Fire(const Event &e) const
 			{
-				_signal(const_cast<Event *>(&e)); //TODO is there a type-safe way? I.e., can we have more than one signal_t?
+				_signal(const_cast<Event *>(&e)); //TODO is there a way without const cast? I.e., can we have more than one signal_t?
 			}
 
 			void Fire(Event &e) const
