@@ -15,25 +15,25 @@
 namespace std_ext {
 
 	template <class Container, typename Sum>
-	Sum accumulate(const Container &c, Sum init)
+	constexpr Sum accumulate(const Container &c, Sum init)
 	{
 		return std::accumulate(std::cbegin(c), std::cend(c), init);
 	}
 
 	template <class Container, typename Sum, class Reductor>
-	Sum accumulate(const Container &c, Sum init, Reductor &&r)
+	constexpr Sum accumulate(const Container &c, Sum init, Reductor &&r)
 	{
 		return std::accumulate(std::cbegin(c), std::cend(c), init, std::forward<Reductor>(r));
 	}
 
 	template <class LookupContainer, class T>
-	bool binary_search(const LookupContainer &c, const T &v)
+	constexpr bool binary_search(const LookupContainer &c, const T &v)
 	{
 		return std::binary_search(std::cbegin(c), std::cend(c), v);
 	}
 
 	template <class Container, class Value>
-	auto count_sorted(const Container &c, Value v)
+	constexpr auto count_sorted(const Container &c, Value v)
 	{
 		return std::distance(std::lower_bound(std::cbegin(c), std::cend(c), v), std::upper_bound(std::cbegin(c), std::cend(c), v));
 	}
@@ -82,13 +82,13 @@ namespace std_ext {
 	}
 
 	template <class LookupContainer, class Value>
-	bool contains(const LookupContainer &c, Value &&v)
+	constexpr bool contains(const LookupContainer &c, Value &&v)
 	{
 		return std::ranges::find(c, std::forward<Value>(v)) != std::cend(c);
 	}
 
 	template <class HayContainer, class NeedleContainer>
-	bool contains_any(const HayContainer &haystack, const NeedleContainer &needles)
+	constexpr bool contains_any(const HayContainer &haystack, const NeedleContainer &needles)
 	{
 		return std::ranges::any_of(needles, [&haystack](auto const &n) {
 			return contains(haystack, n);
