@@ -45,7 +45,7 @@ namespace Ctoolhu::Event {
 		  private:
 
 			friend struct Loki::CreateUsingNew<Aggregator>;
-			Aggregator() = default;
+			Aggregator() noexcept = default;
 
 			signal_t _signal;
 		};

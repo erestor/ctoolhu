@@ -102,7 +102,7 @@ namespace std_ext {
 	}
 
 	template <class Container, class Predicate>
-	auto erase_if(Container &c, Predicate &&p)
+	constexpr auto erase_if(Container &c, Predicate &&p)
 	{
 		return c.erase(std::remove_if(std::begin(c), std::end(c), std::forward<Predicate>(p)), std::end(c));
 	}
