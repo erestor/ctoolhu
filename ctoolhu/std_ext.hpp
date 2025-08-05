@@ -101,6 +101,7 @@ namespace std_ext {
 		return c.erase(std::find(std::begin(c), std::end(c), v));
 	}
 
+	//for Boost containers
 	template <class Container, class Predicate>
 	constexpr auto erase_if(Container &c, Predicate &&p)
 	{
