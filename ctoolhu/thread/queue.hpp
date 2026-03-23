@@ -43,7 +43,7 @@ namespace Ctoolhu::Thread {
 		* Attempt to get the first value in the queue.
 		* Returns true if a value was successfully written to the out parameter, false otherwise.
 		*/
-		bool tryPop(T &out)
+		[[nodiscard]] bool tryPop(T &out)
 		{
 			lock_guard_t lock{_mutex};
 			if (_queue.empty() || !_valid)
@@ -56,10 +56,10 @@ namespace Ctoolhu::Thread {
 
 		/**
 		* Get the first value in the queue.
-		* Will block until a value is available unless clear is called or the instance is destructed.
+		* Will block until a value is available unless the instance is destructed.
 		* Returns true if a value was successfully written to the out parameter, false otherwise.
 		*/
-		bool waitPop(T &out)
+		[[nodiscard]] bool waitPop(T &out)
 		{
 			std::unique_lock lock{_mutex};
 			_changed.wait(lock, [this]() {
@@ -79,29 +79,26 @@ namespace Ctoolhu::Thread {
 		}
 
 		//push a new value onto the queue
-		void push(T value)
+		[[nodiscard]] bool tryPush(T value)
 		{
 			{
 				lock_guard_t lock{_mutex};
+				if (!_valid)
+					return false;
+
 				_queue.push(std::move(value));
 			}
 			_changed.notify_one();
-		}
-
-		//check whether or not the queue is empty
-		[[nodiscard]] bool empty() const
-		{
-			lock_guard_t lock{_mutex};
-			return _queue.empty();
+			return true;
 		}
 
 		//clear all items from the queue
 		void clear()
 		{
 			{
+				std::queue<T> empty;
 				lock_guard_t lock{_mutex};
-				while (!_queue.empty())
-					_queue.pop();
+				std::swap(_queue, empty);
 			}
 			_changed.notify_all();
 		}
@@ -115,7 +112,10 @@ namespace Ctoolhu::Thread {
 		*/
 		void invalidate()
 		{
-			_valid = false;
+			{
+				lock_guard_t lock{_mutex};
+				_valid = false;
+			}
 			_changed.notify_all();
 		}
 

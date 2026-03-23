@@ -19,7 +19,6 @@
 #include "queue.hpp"
 #include "../singleton/holder.hpp"
 #include <algorithm>
-#include <atomic>
 #include <functional>
 #include <future>
 #include <memory>
@@ -32,9 +31,7 @@ namespace Ctoolhu::Thread {
 
 	namespace Private {
 
-		class IThreadTask {
-
-		  public:
+		struct IThreadTask {
 
 			IThreadTask() = default;
 			virtual ~IThreadTask() = default;
@@ -54,8 +51,7 @@ namespace Ctoolhu::Thread {
 
 		  public:
 
-			ThreadTask(Func &&func)
-				: _func{std::move(func)}
+			ThreadTask(Func &&func) : _func{std::move(func)}
 			{
 			}
 
@@ -65,10 +61,7 @@ namespace Ctoolhu::Thread {
 			ThreadTask(ThreadTask &&) = default;
 			ThreadTask &operator=(ThreadTask &&) = default;
 
-			/**
-				* Run the task.
-				*/
-			void execute() override
+			void execute() final
 			{
 				_func();
 			}
@@ -87,6 +80,7 @@ namespace Ctoolhu::Thread {
 
 		explicit Pool(unsigned int numThreads)
 		{
+			_threads.reserve(numThreads);
 			try {
 				for (unsigned int i{0u}; i < numThreads; ++i)
 					_threads.emplace_back(&Pool::worker, this);
@@ -108,7 +102,12 @@ namespace Ctoolhu::Thread {
 		Pool(const Pool &) = delete;
 		Pool &operator=(const Pool &) = delete;
 
-		//submit a job to be run by the thread pool
+		Pool(Pool &&) = delete;
+		Pool &operator=(Pool &&) = delete;
+
+		auto getThreadCount() const noexcept { return _threads.size(); }
+
+		//submit a job to be run by the thread pool, returns its future result
 		template <typename Func, typename... Args>
 		auto submit(Func &&func, Args &&... args)
 		{
@@ -119,7 +118,9 @@ namespace Ctoolhu::Thread {
 
 			packaged_task_t task{std::move(boundTask)};
 			auto result = task.get_future();
-			_workQueue.push(std::make_unique<task_t>(std::move(task)));
+			if (!_workQueue.tryPush(std::make_unique<task_t>(std::move(task))))
+				throw std::runtime_error{ "Failed to submit task to thread pool, the pool is likely shutting down." };
+
 			return result;
 		}
 
@@ -128,17 +129,14 @@ namespace Ctoolhu::Thread {
 		//constantly running function each thread uses to acquire work items from the queue
 		void worker()
 		{
-			while (!_done) {
-				std::unique_ptr<Private::IThreadTask> task;
-				if (_workQueue.waitPop(task))
-					task->execute();
-			}
+			std::unique_ptr<Private::IThreadTask> task;
+			while (_workQueue.waitPop(task))
+				task->execute();
 		}
 
 		//invalidates the queue and joins all running threads
 		void destroy()
 		{
-			_done = true;
 			_workQueue.invalidate();
 			for (auto &thread : _threads) {
 				if (thread.joinable())
@@ -148,7 +146,6 @@ namespace Ctoolhu::Thread {
 
 		Queue<std::unique_ptr<Private::IThreadTask>> _workQueue;
 		std::vector<std::thread> _threads;
-		std::atomic_bool _done{false};
 	};
 
 	using SinglePool = Singleton::Holder<Pool>;

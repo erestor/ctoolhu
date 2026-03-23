@@ -28,6 +28,7 @@ namespace Ctoolhu::Thread {
 
 		LockingProxy &operator=(LockingProxy &&src)
 		{
+			_client->Unlock();
 			_client = std::exchange(src._client, nullptr);
 			return *this;
 		}

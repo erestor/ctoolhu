@@ -6,9 +6,11 @@
 
 #include <algorithm>
 #include <cassert>
+#include <functional>
 #include <iterator>
 #include <numeric>
 #include <ranges>
+#include <utility>
 
 //this is a std extension by purpose, so stays outside the Ctoolhu namespace
 
@@ -29,18 +31,21 @@ namespace std_ext {
 	template <class LookupContainer, class T>
 	constexpr bool binary_search(const LookupContainer &c, const T &v)
 	{
+		assert(std::is_sorted(std::cbegin(c), std::cend(c)) && "Container should be sorted");
 		return std::binary_search(std::cbegin(c), std::cend(c), v);
 	}
 
 	template <class Container, class Value>
-	constexpr auto count_sorted(const Container &c, Value v)
+	constexpr auto count_sorted(const Container &c, const Value &v)
 	{
+		assert(std::is_sorted(std::cbegin(c), std::cend(c)) && "Container should be sorted");
 		return std::distance(std::lower_bound(std::cbegin(c), std::cend(c), v), std::upper_bound(std::cbegin(c), std::cend(c), v));
 	}
 
-	template<class Container, class Value>
-	auto insert_sorted(Container& c, const Value &v)
+	template <class Container, class Value>
+	auto insert_sorted(Container &c, const Value &v)
 	{
+		assert(std::is_sorted(std::cbegin(c), std::cend(c)) && "Container should be sorted");
 		return c.insert(std::upper_bound(c.begin(), c.end(), v), v);
 	}
 
@@ -62,6 +67,7 @@ namespace std_ext {
 	template <class LookupContainer, class T, class Compare = std::less<>>
 	auto binary_find(const LookupContainer &c, const T &val, Compare comp = {})
 	{
+		assert(std::is_sorted(std::cbegin(c), std::cend(c), comp) && "Container should be sorted");
 		auto last = std::cend(c);
 		auto first = std::lower_bound(std::cbegin(c), last, val, comp);
 		return first != last && !comp(val, *first) ? first : last;
@@ -98,7 +104,11 @@ namespace std_ext {
 	template <class Container, class Value>
 	auto erase(Container &c, const Value &v)
 	{
-		return c.erase(std::find(std::begin(c), std::end(c), v));
+		auto it = std::find(std::begin(c), std::end(c), v);
+		if (it == std::end(c))
+			return it;
+
+		return c.erase(it);
 	}
 
 	//for Boost containers
@@ -127,18 +137,25 @@ namespace std_ext {
 	{
 		auto const first = std::begin(c);
 		auto const last = std::end(c);
-		std::reverse(first + choose, last);
+		assert(choose >= 0 && choose <= std::distance(first, last) && "choose must be within the container bounds");
+
+		auto const middle = std::next(first, choose);
+		std::reverse(middle, last);
 		return std::next_permutation(first, last);
 	}
 
 	template <class Container>
 	bool next_combination(Container &c, int choose)
 	{
-		bool result;
 		auto const first = std::begin(c);
+		auto const last = std::end(c);
+		assert(choose >= 0 && choose <= std::distance(first, last) && "choose must be within the container bounds");
+
+		auto const middle = std::next(first, choose);
+		bool result;
 		do {
 			result = next_k_permutation(c, choose);
-		} while (std::adjacent_find(first, first + choose, std::greater{}) != first + choose);
+		} while (std::adjacent_find(first, middle, std::greater{}) != middle);
 		return result;
 	}
 }

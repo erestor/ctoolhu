@@ -45,7 +45,9 @@ namespace Ctoolhu::TypeSafe {
 			return this->_id;
 		}
 
-	  protected:
+		[[nodiscard]] constexpr auto value() const noexcept { return this->_id; }
+
+	protected:
 
 		constexpr ImplicitConversion() noexcept = default;
 	};
@@ -56,7 +58,7 @@ namespace Ctoolhu::TypeSafe {
 
 	  public:
 
-		constexpr auto value() const noexcept { return this->_id; }
+		[[nodiscard]] constexpr auto value() const noexcept { return this->_id; }
 
 	  protected:
 
@@ -76,15 +78,15 @@ namespace Ctoolhu::TypeSafe {
 	//	int _id;
 	//
 	template <
-		class RequestingObject,		//type of the object which will have this id
-		typename IdType = int,		//type of the id that would normally be used
+		class TagObject,		//type of the object which will have this id
+		typename IdType = int,	//type of the id that would normally be used
 		template <typename> class ConversionPolicy = ExplicitConversion
 	>
 	class Id : public ConversionPolicy<IdType> {
 
 	  public:
 
-		using object_t = RequestingObject;
+		using tag_t = TagObject;
 		using id_t = IdType;
 
 		constexpr Id() = default;
@@ -93,6 +95,8 @@ namespace Ctoolhu::TypeSafe {
 		{
 			this->_id = id;
 		}
+
+		static_assert(std::is_trivially_copyable_v<IdType>);
 	};
 
 	static_assert(sizeof(int) == sizeof(Id<int, int, ImplicitConversion>));
