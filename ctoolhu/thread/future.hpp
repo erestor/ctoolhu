@@ -26,7 +26,7 @@ namespace Ctoolhu::Thread {
 
 	  public:
 
-		constexpr Future(std::future<T> &&future)
+		explicit constexpr Future(std::future<T> &&future) noexcept
 			: _future{std::move(future)}
 		{
 		}
@@ -39,10 +39,10 @@ namespace Ctoolhu::Thread {
 		constexpr Future(Future &&) = default;
 		constexpr Future &operator=(Future &&) = default;
 
-		constexpr ~Future()
+		constexpr ~Future() noexcept
 		{
 			if (_future.valid())
-				_future.get();
+				_future.wait();
 		}
 
 		constexpr auto get()
