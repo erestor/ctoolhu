@@ -22,6 +22,7 @@
 #include <functional>
 #include <future>
 #include <memory>
+#include <stdexcept>
 #include <thread>
 #include <type_traits>
 #include <utility>
@@ -94,16 +95,16 @@ namespace Ctoolhu::Thread {
 		Pool()
 			: Pool{std::max(std::thread::hardware_concurrency(), 1u)} {} //always create at least one thread by default(hardware_concurrency can return 0)
 
-		~Pool()
-		{
-			destroy();
-		}
-
 		Pool(const Pool &) = delete;
 		Pool &operator=(const Pool &) = delete;
 
 		Pool(Pool &&) = delete;
 		Pool &operator=(Pool &&) = delete;
+
+		~Pool()
+		{
+			destroy();
+		}
 
 		auto getThreadCount() const noexcept { return _threads.size(); }
 
