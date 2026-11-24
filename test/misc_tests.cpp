@@ -6,8 +6,10 @@
 #include <ctoolhu/visitor/visitable.hpp>
 #include <ctoolhu/visitor/visitor.hpp>
 #include <gtest/gtest.h>
+#include <filesystem>
 #include <fstream>
 #include <memory>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -124,10 +126,10 @@ namespace {
 
 	  protected:
 
-		void SetUp() override { boost::filesystem::remove_all(_root); }
-		void TearDown() override { boost::filesystem::remove_all(_root); }
+		void SetUp() override { std::filesystem::remove_all(_root); }
+		void TearDown() override { std::filesystem::remove_all(_root); }
 
-		const boost::filesystem::path _root{boost::filesystem::temp_directory_path() / "ctoolhu_test"};
+		const std::filesystem::path _root{std::filesystem::temp_directory_path() / "ctoolhu_test"};
 	};
 
 } //ns
@@ -136,20 +138,28 @@ TEST_F(EnsureDirectoryExistsTest, CreatesMissingParentsAndReturnsThePath)
 {
 	auto const dir = _root / "a" / "b";
 	EXPECT_EQ(Ctoolhu::FileSystem::EnsureDirectoryExists(dir), dir);
-	EXPECT_TRUE(boost::filesystem::is_directory(dir));
+	EXPECT_TRUE(std::filesystem::is_directory(dir));
 }
 
 TEST_F(EnsureDirectoryExistsTest, ExistingDirectory_DoesNothing)
 {
 	auto const dir = _root / "a";
-	boost::filesystem::create_directories(dir);
+	std::filesystem::create_directories(dir);
 	EXPECT_NO_THROW(Ctoolhu::FileSystem::EnsureDirectoryExists(dir));
 }
 
 TEST_F(EnsureDirectoryExistsTest, FileOfTheSameName_Throws)
 {
-	boost::filesystem::create_directories(_root);
+	std::filesystem::create_directories(_root);
 	auto const file = _root / "file";
-	std::ofstream{file.string()} << "x";
-	EXPECT_THROW(Ctoolhu::FileSystem::EnsureDirectoryExists(file), boost::filesystem::filesystem_error);
+	std::ofstream{file} << "x";
+	EXPECT_THROW(Ctoolhu::FileSystem::EnsureDirectoryExists(file), std::filesystem::filesystem_error);
+}
+
+TEST_F(EnsureDirectoryExistsTest, StringPath_ReturnsTheSameString)
+{
+	std::string const dir = (_root / "s").string();
+	std::string const result = Ctoolhu::FileSystem::EnsureDirectoryExists(dir);
+	EXPECT_EQ(result, dir);
+	EXPECT_TRUE(std::filesystem::is_directory(dir));
 }
