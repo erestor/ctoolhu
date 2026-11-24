@@ -22,3 +22,6 @@ Ctoolhu.vcxproj.user
 
 # vcpkg
 vcpkg_installed/
+
+# VS files
+.vs/
