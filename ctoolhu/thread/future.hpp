@@ -26,7 +26,7 @@ namespace Ctoolhu::Thread {
 
 	  public:
 
-		explicit constexpr Future(std::future<T> &&future) noexcept
+		explicit Future(std::future<T> &&future) noexcept
 			: _future{std::move(future)}
 		{
 		}
@@ -36,21 +36,35 @@ namespace Ctoolhu::Thread {
 		Future &operator=(const Future &) = delete;
 
 		//allow moving
-		constexpr Future(Future &&) = default;
-		constexpr Future &operator=(Future &&) = default;
+		Future(Future &&) noexcept = default;
 
-		constexpr ~Future() noexcept
+		Future &operator=(Future &&src) noexcept
 		{
-			if (_future.valid())
-				_future.wait();
+			if (this != &src) {
+				_wait(); //like the destructor, don't abandon the job we're holding
+				_future = std::move(src._future);
+			}
+			return *this;
 		}
 
-		constexpr auto get()
+		~Future() noexcept
+		{
+			_wait();
+		}
+
+		//decltype(auto) keeps the reference for Future<T &>
+		decltype(auto) get()
 		{
 			return _future.get();
 		}
 
 	  private:
+
+		void _wait() const noexcept
+		{
+			if (_future.valid())
+				_future.wait();
+		}
 
 		std::future<T> _future;
 	};

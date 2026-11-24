@@ -46,7 +46,7 @@ namespace Ctoolhu::Thread {
 		[[nodiscard]] bool tryPop(T &out)
 		{
 			lock_guard_t lock{_mutex};
-			if (_queue.empty() || !_valid)
+			if (_queue.empty())
 				return false;
 
 			out = std::move(_queue.front());
@@ -57,6 +57,7 @@ namespace Ctoolhu::Thread {
 		/**
 		* Get the first value in the queue.
 		* Will block until a value is available unless the instance is destructed.
+		* Values pushed before the queue was invalidated are still returned, so no work is lost on shutdown.
 		* Returns true if a value was successfully written to the out parameter, false otherwise.
 		*/
 		[[nodiscard]] bool waitPop(T &out)
@@ -68,9 +69,9 @@ namespace Ctoolhu::Thread {
 
 			/*
 				* Using the condition in the predicate ensures that spurious wakeups with a valid
-				* but empty queue will not proceed, so only need to check for validity before proceeding.
+				* but empty queue will not proceed, so an empty queue here means it has been invalidated.
 				*/
-			if (!_valid)
+			if (_queue.empty())
 				return false;
 
 			out = std::move(_queue.front());
@@ -107,8 +108,7 @@ namespace Ctoolhu::Thread {
 		* Invalidate the queue.
 		* Used to ensure no conditions are being waited on in waitPop when
 		* a thread or the application is trying to exit.
-		* The queue is invalid after calling this method and it is an error
-		* to continue using a queue after this method has been called.
+		* No more values can be pushed afterwards, the ones already in the queue can still be popped.
 		*/
 		void invalidate()
 		{

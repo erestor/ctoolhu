@@ -20,9 +20,11 @@
 
 // $Id: Singleton.h 834 2007-08-02 19:36:10Z syntheticpp $
 
+#include <atomic>
 #include <stdexcept>
 #include <cassert>
 #include <cstdlib>
+#include <mutex>
 
 #ifdef _MSC_VER
 #define LOKI_C_CALLING_CONVENTION_QUALIFIER __cdecl 
@@ -115,16 +117,18 @@ namespace Loki
         
     private:
         // Helpers
-        static void MakeInstance();
+        static T* MakeInstance();
         static void LOKI_C_CALLING_CONVENTION_QUALIFIER DestroySingleton();
-        
+
         // Protection
         SingletonHolder();
-        
+
         // Data
-        using PtrInstanceType = T*;
+        // Creation is thread-safe (double-checked locking), the lock is only taken until the instance exists.
+        using PtrInstanceType = std::atomic<T*>;
         static PtrInstanceType pInstance_;
-        static bool destroyed_;
+        static bool destroyed_; //guarded by the mutex
+        static std::mutex& Mutex();
     };
     
     ////////////////////////////////////////////////////////////////////////////////
@@ -138,7 +142,7 @@ namespace Loki
         template <class> class L
     >
     typename SingletonHolder<T, C, L>::PtrInstanceType
-        SingletonHolder<T, C, L>::pInstance_ = 0;
+        SingletonHolder<T, C, L>::pInstance_{nullptr};
 
     template
     <
@@ -160,11 +164,24 @@ namespace Loki
     >
     inline T& SingletonHolder<T, CreationPolicy, LifetimePolicy>::Instance()
     {
-        if (!pInstance_)
+        T* p = pInstance_.load(std::memory_order_acquire);
+        if (!p)
         {
-            MakeInstance();
+            p = MakeInstance();
         }
-        return *pInstance_;
+        return *p;
+    }
+
+    template
+    <
+        class T,
+        template <class> class C,
+        template <class> class L
+    >
+    std::mutex& SingletonHolder<T, C, L>::Mutex()
+    {
+        static std::mutex mutex; //function-local static, so it is initialised (thread-safely) before first use
+        return mutex;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -177,18 +194,22 @@ namespace Loki
         template <class> class CreationPolicy,
         template <class> class LifetimePolicy
     >
-    void SingletonHolder<T, CreationPolicy, LifetimePolicy>::MakeInstance()
+    T* SingletonHolder<T, CreationPolicy, LifetimePolicy>::MakeInstance()
     {
-        if (!pInstance_)
+        std::lock_guard lock{Mutex()};
+        T* p = pInstance_.load(std::memory_order_relaxed);
+        if (!p)
         {
             if (destroyed_)
             {
                 destroyed_ = false;
                 LifetimePolicy<T>::OnDeadReference();
             }
-            pInstance_ = CreationPolicy<T>::Create();
-            LifetimePolicy<T>::ScheduleDestruction(pInstance_, &DestroySingleton);
+            p = CreationPolicy<T>::Create();
+            pInstance_.store(p, std::memory_order_release);
+            LifetimePolicy<T>::ScheduleDestruction(p, &DestroySingleton);
         }
+        return p;
     }
 
     template
@@ -200,9 +221,9 @@ namespace Loki
     void LOKI_C_CALLING_CONVENTION_QUALIFIER 
     SingletonHolder<T, CreationPolicy, L>::DestroySingleton()
     {
+        std::lock_guard lock{Mutex()};
         assert(!destroyed_);
-        CreationPolicy<T>::Destroy(pInstance_);
-        pInstance_ = 0;
+        CreationPolicy<T>::Destroy(pInstance_.exchange(nullptr, std::memory_order_acq_rel));
         destroyed_ = true;
     }
 

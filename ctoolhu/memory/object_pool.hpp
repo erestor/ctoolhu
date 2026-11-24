@@ -5,31 +5,52 @@
 #define _ctoolhu_memory_object_pool_included_
 
 #include "object_pool_deleter.hpp"
-#include <boost/pool/object_pool.hpp>
-#include <exception>
+#include <boost/pool/pool.hpp>
+#include <cstddef>
 #include <memory>
+#include <new>
+#include <utility>
 
 namespace Ctoolhu::Memory {
 
+	namespace Private {
+
+		//Unordered pool of chunks for objects of type T.
+		//Unlike boost::object_pool, allocation and deallocation are constant time
+		//(boost::object_pool keeps the free list ordered so that it can destroy the remaining objects in its destructor).
+		template <class T>
+		class PoolStorage {
+
+			static_assert(alignof(T) <= alignof(std::max_align_t), "over-aligned types are not supported");
+
+		  protected:
+
+			boost::pool<> _pool{sizeof(T)};
+		};
+
+	} //ns Private
+
+	//malloc returns nullptr when memory can't be allocated
 	template <class T>
-	class PoolIgnoreMallocErrorsPolicy : protected boost::object_pool<T> {
+	class PoolIgnoreMallocErrorsPolicy : protected Private::PoolStorage<T> {
 
 	  protected:
 
-		auto malloc()
+		void *malloc()
 		{
-			return boost::object_pool<T>::malloc();
+			return this->_pool.malloc();
 		}
 	};
 
+	//malloc throws std::bad_alloc when memory can't be allocated
 	template <class T>
-	class PoolThrowOnMallocErrorsPolicy : protected boost::object_pool<T> {
+	class PoolThrowOnMallocErrorsPolicy : protected Private::PoolStorage<T> {
 
 	  protected:
 
-		auto malloc()
+		void *malloc()
 		{
-			auto ptr = boost::object_pool<T>::malloc();
+			auto ptr = this->_pool.malloc();
 			if (ptr == nullptr)
 				throw std::bad_alloc();
 
@@ -37,7 +58,8 @@ namespace Ctoolhu::Memory {
 		}
 	};
 
-	//Extension of boost::object_pool that can used to create unique_ptr of T without worrying about the deleter
+	//Pool of objects of type T handed out as unique_ptr, so that they're returned to the pool automatically.
+	//All the pointers must be released before the pool is destroyed.
 	template <
 		class T,
 		template <class> class MallocErrorsPolicy = PoolIgnoreMallocErrorsPolicy //ignore errors by default
@@ -48,20 +70,29 @@ namespace Ctoolhu::Memory {
 
 	  public:
 
-		using unique_ptr_t = std::unique_ptr<T, deleter_t &>;
+		using unique_ptr_t = std::unique_ptr<T, deleter_t>;
 
-		ObjectPool() noexcept : _deleter(this) {}
+		ObjectPool() = default;
+		ObjectPool(const ObjectPool &) = delete;
+		ObjectPool &operator=(const ObjectPool &) = delete;
 
+		//returns an empty pointer if the memory can't be allocated and errors are ignored
 		template <class... Args>
 		unique_ptr_t make_unique(Args &&... args)
 		{
-			auto ptr = this->malloc(); //errors are handled according to the policy template
-			return unique_ptr_t{::new (ptr) T(std::forward<Args>(args)...), _deleter};
+			deleter_t deleter{&this->_pool};
+			void *mem = this->malloc(); //errors are handled according to the policy template
+			if (mem == nullptr)
+				return unique_ptr_t{nullptr, deleter};
+
+			try {
+				return unique_ptr_t{::new (mem) T(std::forward<Args>(args)...), deleter};
+			}
+			catch (...) {
+				this->_pool.free(mem); //the constructor threw, return the chunk
+				throw;
+			}
 		}
-
-	  private:
-
-		deleter_t _deleter;
 	};
 
 } //ns

@@ -21,9 +21,9 @@ namespace Ctoolhu::Thread {
 			_client->Lock();
 		}
 
-		LockingProxy(LockingProxy &&src)
+		LockingProxy(LockingProxy &&src) noexcept
+			: _client{std::exchange(src._client, nullptr)}
 		{
-			_client = std::exchange(src._client, nullptr);
 		}
 
 		LockingProxy(const LockingProxy &) = delete;

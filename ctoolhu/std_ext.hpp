@@ -39,7 +39,8 @@ namespace std_ext {
 	constexpr auto count_sorted(const Container &c, const Value &v)
 	{
 		assert(std::is_sorted(std::cbegin(c), std::cend(c)) && "Container should be sorted");
-		return std::distance(std::lower_bound(std::cbegin(c), std::cend(c), v), std::upper_bound(std::cbegin(c), std::cend(c), v));
+		auto const [first, last] = std::equal_range(std::cbegin(c), std::cend(c), v);
+		return std::distance(first, last);
 	}
 
 	template <class Container, class Value>
@@ -73,18 +74,18 @@ namespace std_ext {
 		return first != last && !comp(val, *first) ? first : last;
 	}
 
+	//appends the source elements to the destination, returns an iterator to the first appended element
+	//(range insert keeps the geometric growth of the destination, unlike reserving the exact size on each call)
 	template <class Destination, class Source>
 	auto concat(Destination &d, const Source &s)
 	{
-		d.reserve(d.size() + s.size());
-		return std::copy(std::cbegin(s), std::cend(s), std::back_inserter(d));
+		return d.insert(std::end(d), std::cbegin(s), std::cend(s));
 	}
 
 	template <class Destination, class Source>
 	auto concat_move(Destination &d, Source &s)
 	{
-		d.reserve(d.size() + s.size());
-		return std::move(std::begin(s), std::end(s), std::back_inserter(d));
+		return d.insert(std::end(d), std::make_move_iterator(std::begin(s)), std::make_move_iterator(std::end(s)));
 	}
 
 	template <class LookupContainer, class Value>
@@ -144,6 +145,10 @@ namespace std_ext {
 		return std::next_permutation(first, last);
 	}
 
+	//Rearranges the container so that its first 'choose' elements form the next combination in lexicographical order.
+	//Start with a sorted container. Both the chosen part and the rest are kept sorted.
+	//Returns false when there are no more combinations; the container is then sorted again (i.e. back at the first combination).
+	//Each step is linear, unlike filtering the k-permutations, which costs k! times more.
 	template <class Container>
 	bool next_combination(Container &c, int choose)
 	{
@@ -152,11 +157,35 @@ namespace std_ext {
 		assert(choose >= 0 && choose <= std::distance(first, last) && "choose must be within the container bounds");
 
 		auto const middle = std::next(first, choose);
-		bool result;
-		do {
-			result = next_k_permutation(c, choose);
-		} while (std::adjacent_find(first, middle, std::greater{}) != middle);
-		return result;
+		if (first == middle || middle == last)
+			return false; //only one combination exists
+
+		//find the rightmost chosen element that can be increased, i.e. that is less than the largest unchosen element
+		auto const largestRest = std::prev(last);
+		auto pivot = middle;
+		while (pivot != first) {
+			--pivot;
+			if (*pivot < *largestRest) {
+				//swap it with the smallest unchosen element greater than it (the unchosen part stays sorted)
+				auto const successor = std::upper_bound(middle, last, *pivot);
+				std::iter_swap(pivot, successor);
+
+				//the chosen elements after the pivot are all >= every unchosen one, so the sequence
+				//[after successor, last) + [after pivot, middle) is sorted and holds the smallest candidates to follow the pivot;
+				//move it right after the pivot, which leaves [middle, successor] at the end
+				auto const afterSuccessor = std::next(successor);
+				auto const largerCount = std::distance(afterSuccessor, last);
+				std::rotate(std::next(pivot), afterSuccessor, last);
+
+				//the unchosen part is now two sorted runs, the smaller elements last: swap the runs to sort it
+				std::rotate(middle, std::next(middle, largerCount), last);
+				return true;
+			}
+		}
+
+		//no chosen element can be increased, this was the last combination: restore the initial (sorted) order
+		std::rotate(first, middle, last);
+		return false;
 	}
 }
 

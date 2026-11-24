@@ -5,7 +5,6 @@
 #define _ctoolhu_event_firer_included_
 
 #include "aggregator.hpp"
-#include "../singleton/holder.hpp"
 #include <type_traits>
 
 namespace Ctoolhu::Event {
@@ -15,7 +14,8 @@ namespace Ctoolhu::Event {
 	void Fire()
 	{
 		static_assert(std::is_empty_v<Event>, "can't fire events with parameters by type only");
-		Private::SingleAggregator<Event>::Instance().Fire(Singleton::Holder<Event>::Instance());
+		static Event e; //an empty event carries no data, a shared instance is enough
+		Private::SingleAggregator<Event>::Instance().Fire(e);
 	}
 
 	//for firing const events with data
