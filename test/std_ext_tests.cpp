@@ -68,13 +68,28 @@ TEST(NextCombinationTest, TwentyChooseSix_ProducesAllCombinations)
 	EXPECT_EQ(count, 38760);
 }
 
-TEST(ConcatTest, Concat_AppendsAndReturnsIteratorToFirstAppended)
+TEST(ConcatTest, Concat_AppendsAndReturnsBackInserter)
 {
 	std::vector<int> d{1};
 	std::vector<int> const s{2, 3};
-	auto it = std_ext::concat(d, s);
-	EXPECT_EQ(d, (std::vector<int>{1, 2, 3}));
-	EXPECT_EQ(it, d.begin() + 1);
+	auto out = std_ext::concat(d, s);
+	*out++ = 4; //the result keeps appending
+	EXPECT_EQ(d, (std::vector<int>{1, 2, 3, 4}));
+}
+
+TEST(ConcatTest, Concat_ToItself_DuplicatesTheElements)
+{
+	std::vector<int> v{1, 2, 3};
+	v.shrink_to_fit(); //force a reallocation during the insert
+	std_ext::concat(v, v);
+	EXPECT_EQ(v, (std::vector<int>{1, 2, 3, 1, 2, 3}));
+}
+
+TEST(ConcatTest, ConcatMove_ToItself_DoesNothing)
+{
+	std::vector<int> v{1, 2};
+	std_ext::concat_move(v, v);
+	EXPECT_EQ(v, (std::vector<int>{1, 2}));
 }
 
 TEST(ConcatTest, ConcatMove_MovesMoveOnlyElements)

@@ -59,7 +59,9 @@ namespace Ctoolhu::Memory {
 	};
 
 	//Pool of objects of type T handed out as unique_ptr, so that they're returned to the pool automatically.
-	//All the pointers must be released before the pool is destroyed.
+	//All the pointers must be destroyed (or reset) before the pool is destroyed: the pool frees its memory
+	//without running destructors of objects that are still alive.
+	//Don't call unique_ptr::release() on them, the object would never be destroyed and its chunk never returned.
 	template <
 		class T,
 		template <class> class MallocErrorsPolicy = PoolIgnoreMallocErrorsPolicy //ignore errors by default

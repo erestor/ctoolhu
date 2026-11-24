@@ -202,8 +202,8 @@ namespace Loki
         {
             if (destroyed_)
             {
+                LifetimePolicy<T>::OnDeadReference(); //may throw, the singleton then stays dead
                 destroyed_ = false;
-                LifetimePolicy<T>::OnDeadReference();
             }
             p = CreationPolicy<T>::Create();
             pInstance_.store(p, std::memory_order_release);
@@ -221,10 +221,17 @@ namespace Loki
     void LOKI_C_CALLING_CONVENTION_QUALIFIER 
     SingletonHolder<T, CreationPolicy, L>::DestroySingleton()
     {
-        std::lock_guard lock{Mutex()};
-        assert(!destroyed_);
-        CreationPolicy<T>::Destroy(pInstance_.exchange(nullptr, std::memory_order_acq_rel));
-        destroyed_ = true;
+        T* p;
+        {
+            std::lock_guard lock{Mutex()};
+            assert(!destroyed_);
+            p = pInstance_.exchange(nullptr, std::memory_order_acq_rel);
+            destroyed_ = true;
+        }
+        //destroy outside the lock: T's destructor may wait for other threads that call Instance()
+        //(e.g. the thread pool joining jobs that use Async), which would otherwise deadlock;
+        //those calls see a dead reference and are handled by the lifetime policy instead
+        CreationPolicy<T>::Destroy(p);
     }
 
 } // namespace Loki

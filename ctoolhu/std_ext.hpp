@@ -9,12 +9,26 @@
 #include <functional>
 #include <iterator>
 #include <numeric>
+#include <memory>
 #include <ranges>
+#include <type_traits>
 #include <utility>
 
 //this is a std extension by purpose, so stays outside the Ctoolhu namespace
 
 namespace std_ext {
+
+	namespace Private {
+
+		template <class Destination, class Source>
+		bool is_same_object(const Destination &d, const Source &s) noexcept
+		{
+			if constexpr (std::is_same_v<Destination, Source>)
+				return std::addressof(d) == std::addressof(s);
+			else
+				return false;
+		}
+	}
 
 	template <class Container, typename Sum>
 	constexpr Sum accumulate(const Container &c, Sum init)
@@ -74,18 +88,31 @@ namespace std_ext {
 		return first != last && !comp(val, *first) ? first : last;
 	}
 
-	//appends the source elements to the destination, returns an iterator to the first appended element
+	//appends the source elements to the destination, returns a back inserter to the destination for further appending
 	//(range insert keeps the geometric growth of the destination, unlike reserving the exact size on each call)
+	//the source may be the destination itself
 	template <class Destination, class Source>
 	auto concat(Destination &d, const Source &s)
 	{
-		return d.insert(std::end(d), std::cbegin(s), std::cend(s));
+		if (Private::is_same_object(d, s)) {
+			Destination const copy(s); //not braces, those could pick an initializer_list constructor //inserting a range of the container into itself is undefined
+			d.insert(std::end(d), std::cbegin(copy), std::cend(copy));
+		}
+		else
+			d.insert(std::end(d), std::cbegin(s), std::cend(s));
+
+		return std::back_inserter(d);
 	}
 
+	//moves the source elements to the end of the destination, returns a back inserter to the destination for further appending
+	//if the source is the destination itself, nothing is done (its elements are already there)
 	template <class Destination, class Source>
 	auto concat_move(Destination &d, Source &s)
 	{
-		return d.insert(std::end(d), std::make_move_iterator(std::begin(s)), std::make_move_iterator(std::end(s)));
+		if (!Private::is_same_object(d, s))
+			d.insert(std::end(d), std::make_move_iterator(std::begin(s)), std::make_move_iterator(std::end(s)));
+
+		return std::back_inserter(d);
 	}
 
 	template <class LookupContainer, class Value>
