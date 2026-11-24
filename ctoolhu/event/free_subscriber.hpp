@@ -6,6 +6,8 @@
 
 #include "aggregator.hpp"
 #include <boost/signals2.hpp>
+#include <algorithm>
+#include <vector>
 
 namespace Ctoolhu::Event {
 
@@ -24,19 +26,20 @@ namespace Ctoolhu::Event {
 			src._connections.clear();
 		}
 
+		//note: handlers subscribed for a member function keep calling the object they were subscribed with
 		FreeSubscriber &operator=(FreeSubscriber &&src) noexcept
 		{
-			_connections = std::move(src._connections);
-			src._connections.clear();
+			if (this != &src) {
+				_disconnectAll(); //otherwise the handlers we hold now would stay connected forever
+				_connections = std::move(src._connections);
+				src._connections.clear();
+			}
 			return *this;
 		}
 
 		~FreeSubscriber()
 		{
-			for (auto &conn : _connections) {
-				if (conn.connected())
-					conn.disconnect();
-			}
+			_disconnectAll();
 		}
 
 		//subscribes a member handler to a stateful event
@@ -91,6 +94,14 @@ namespace Ctoolhu::Event {
 		}
 
 	  private:
+
+		void _disconnectAll() noexcept
+		{
+			for (auto &conn : _connections)
+				conn.disconnect(); //no-op for a connection that is already disconnected
+
+			_connections.clear();
+		}
 
 		std::vector<connection_t> _connections;
 	};

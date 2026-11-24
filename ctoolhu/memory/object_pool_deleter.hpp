@@ -4,26 +4,30 @@
 #ifndef _ctoolhu_memory_object_pool_deleter_included_
 #define _ctoolhu_memory_object_pool_deleter_included_
 
-#include <boost/pool/object_pool.hpp>
+#include <boost/pool/pool.hpp>
 
 namespace Ctoolhu::Memory {
 
+	//destroys an object created in a pool's chunk and returns the chunk to the pool
 	template <class T>
 	class ObjectPoolDeleter {
 
 	  public:
 
-		explicit ObjectPoolDeleter(boost::object_pool<T> *pool) noexcept
+		ObjectPoolDeleter() noexcept = default;
+
+		explicit ObjectPoolDeleter(boost::pool<> *pool) noexcept
 			: _pool{pool} {}
 
-		void operator()(T *obj)
+		void operator()(T *obj) const noexcept
 		{
-			_pool->destroy(obj);
+			obj->~T();
+			_pool->free(obj);
 		}
 
 	  private:
 
-		boost::object_pool<T> *_pool;
+		boost::pool<> *_pool{nullptr};
 	};
 
 } //ns

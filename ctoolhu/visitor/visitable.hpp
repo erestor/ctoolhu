@@ -9,8 +9,10 @@ namespace Ctoolhu::Visitor {
 
 	  public:
 
-		virtual Visitor::ret_t accept(const Visitor &) = 0;
-		virtual Visitor::ret_t accept(const Visitor &) const = 0;
+		virtual ~VisitableRoot() = default; //the hierarchy can be deleted through a pointer to this root
+
+		virtual Visitor::ret_t accept(Visitor &) = 0;
+		virtual Visitor::ret_t accept(Visitor &) const = 0;
 	};
 
 	//derived classes of the visitable hierarchy
@@ -23,11 +25,11 @@ namespace Ctoolhu::Visitor {
 
 	  public:
 
-		Visitor::ret_t accept(const Visitor &v) final {
+		Visitor::ret_t accept(Visitor &v) final {
 			return v.visit(static_cast<Derived &>(*this));
 		}
 
-		Visitor::ret_t accept(const Visitor &v) const final {
+		Visitor::ret_t accept(Visitor &v) const final {
 			return v.visit(static_cast<const Derived &>(*this));
 		}
 

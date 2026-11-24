@@ -22,6 +22,10 @@ namespace Ctoolhu::Thread {
 			_mutex.unlock();
 		}
 
+		//BasicLockable interface, so that std::lock_guard, std::unique_lock and std::scoped_lock can be used too
+		void lock() { Lock(); }
+		void unlock() { Unlock(); }
+
 	  protected:
 
 		Lockable() = default;

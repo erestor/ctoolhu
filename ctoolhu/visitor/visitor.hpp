@@ -23,7 +23,7 @@ namespace Ctoolhu::Visitor {
 	  public:
 
 		using Visitor<ReturnType, VisitedTypes...>::visit;
-		virtual ReturnType visit(Visited &) const = 0;
+		virtual ReturnType visit(Visited &) = 0; //non-const, so that visitors can keep state
 	};
 
 	//base class for visitor hierarchy of const types
@@ -46,7 +46,7 @@ namespace Ctoolhu::Visitor {
 	  public:
 
 		using ConstVisitor<ReturnType, VisitedTypes...>::visit;
-		virtual ReturnType visit(const Visited &) const = 0;
+		virtual ReturnType visit(const Visited &) = 0; //non-const, so that visitors can keep state
 	};
 
 } //ns

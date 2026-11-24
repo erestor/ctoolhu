@@ -112,8 +112,12 @@ namespace Ctoolhu::Thread {
 		template <typename Func, typename... Args>
 		auto submit(Func &&func, Args &&... args)
 		{
-			auto boundTask = std::bind(std::forward<Func>(func), std::forward<Args>(args)...); //using a lambda instead would lose the perfect forwarding
-			using job_result_t = std::invoke_result_t<decltype(boundTask)>;
+			//the function and the arguments are stored as decayed copies (like std::async does, use std::ref to pass a reference)
+			//and handed over as rvalues when the job runs, so move-only arguments work too
+			auto boundTask = [func = std::forward<Func>(func), ...args = std::forward<Args>(args)]() mutable -> decltype(auto) {
+				return std::invoke(std::move(func), std::move(args)...);
+			};
+			using job_result_t = std::invoke_result_t<decltype(boundTask) &>;
 			using packaged_task_t = std::packaged_task<job_result_t()>;
 			using task_t = Private::ThreadTask<packaged_task_t>;
 
@@ -131,11 +135,13 @@ namespace Ctoolhu::Thread {
 		void worker()
 		{
 			std::unique_ptr<Private::IThreadTask> task;
-			while (_workQueue.waitPop(task))
+			while (_workQueue.waitPop(task)) {
 				task->execute();
+				task.reset(); //release the job's resources now, not when the next job arrives
+			}
 		}
 
-		//invalidates the queue and joins all running threads
+		//invalidates the queue and joins all running threads (jobs submitted before still run)
 		void destroy()
 		{
 			_workQueue.invalidate();

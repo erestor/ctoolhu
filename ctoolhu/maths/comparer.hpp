@@ -4,9 +4,23 @@
 #ifndef _ctoolhu_maths_comparer_included_
 #define _ctoolhu_maths_comparer_included_
 
-#include <cstdlib>
+#include <cmath>
 
 namespace Ctoolhu::Maths {
+
+	namespace Private {
+
+		//10 to the power of -exponent, computed at compile time
+		constexpr double negativePowerOf10(int exponent) noexcept
+		{
+			double result{1.0};
+			for (int i = 0; i < exponent; ++i)
+				result *= 10.0;
+
+			return 1.0 / result;
+		}
+
+	} //ns Private
 
 	//Provides simple comparison for floating point types
 	template <
@@ -20,8 +34,7 @@ namespace Ctoolhu::Maths {
 		template <class Numeric>
 		static bool equal(Decimal a, Numeric b) noexcept
 		{
-			static auto epsilon = std::pow(10.0f, -_precision);
-			return std::abs(a - static_cast<Decimal>(b)) < epsilon;
+			return std::abs(a - static_cast<Decimal>(b)) < _epsilon;
 		}
 
 		template <class Numeric>
@@ -50,8 +63,8 @@ namespace Ctoolhu::Maths {
 
 	  private:
 
-		static constexpr int _precision{Precision};
-		//it would be great to have static epsilon here, but constexpr power doesn't exist
+		static_assert(Precision >= 0, "Precision must not be negative");
+		static constexpr double _epsilon{Private::negativePowerOf10(Precision)};
 	};
 
 } //ns Ctoolhu::Maths
